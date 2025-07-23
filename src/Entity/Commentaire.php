@@ -20,6 +20,12 @@ class Commentaire
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateComment = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?Tweet $tweet = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +51,30 @@ class Commentaire
     public function setDateComment(\DateTime $dateComment): static
     {
         $this->dateComment = $dateComment;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTweet(): ?Tweet
+    {
+        return $this->tweet;
+    }
+
+    public function setTweet(?Tweet $tweet): static
+    {
+        $this->tweet = $tweet;
 
         return $this;
     }

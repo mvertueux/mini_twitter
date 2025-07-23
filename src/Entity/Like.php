@@ -18,6 +18,12 @@ class Like
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateLiker = null;
 
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    private ?Tweet $tweet = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +37,30 @@ class Like
     public function setDateLiker(\DateTime $dateLiker): static
     {
         $this->dateLiker = $dateLiker;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTweet(): ?Tweet
+    {
+        return $this->tweet;
+    }
+
+    public function setTweet(?Tweet $tweet): static
+    {
+        $this->tweet = $tweet;
 
         return $this;
     }

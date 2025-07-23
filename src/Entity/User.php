@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,6 +34,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Tweet>
+     */
+    #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'user')]
+    private Collection $tweets;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'user')]
+    private Collection $likes;
+
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user')]
+    private Collection $commentaires;
+
+    /**
+     * @var Collection<int, Retweet>
+     */
+    #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'user')]
+    private Collection $retweets;
+
+    public function __construct()
+    {
+        $this->tweets = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,5 +146,125 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, Tweet>
+     */
+    public function getTweets(): Collection
+    {
+        return $this->tweets;
+    }
+
+    public function addTweet(Tweet $tweet): static
+    {
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets->add($tweet);
+            $tweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): static
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getUser() === $this) {
+                $commentaire->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Retweet>
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): static
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets->add($retweet);
+            $retweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(Retweet $retweet): static
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getUser() === $this) {
+                $retweet->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
