@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+
+<div>
+ <h2>Dashboard Admin</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                {# <th>Role</th> #}
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                {# <td>{{ user.roles }}</td> #}
+                <td>
+                    <a href="{{ path('app_admin_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('app_admin_edit', {'id': user.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}<br>
+        </tbody>
+    </table>
+
+    
+</div>
+{% endblock %}
