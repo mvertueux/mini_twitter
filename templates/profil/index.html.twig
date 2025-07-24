@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfilController!
+{% endblock %}
+
+{% block body %}
+
+	<div class="example-wrapper">
+		<h1>{{ user.email }}</h1>
+	</div>
+
+	<div>
+		{% for tweet in tweets %}
+			{{ tweet.content }}
+			{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}
+		{% endfor %}
+
+	</div>
+{% endblock %}
