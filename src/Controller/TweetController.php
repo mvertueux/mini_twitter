@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tweet;
+use App\Entity\Like;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,14 +15,61 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/tweet')]
 final class TweetController extends AbstractController
 {
-    #[Route(name: 'app_tweet_index', methods: ['GET'])]
-    public function index(TweetRepository $tweetRepository): Response
+
+    // POSTER NOUVEAU TWEET
+    #[Route(name: 'app_tweet_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, TweetRepository $tweetRepository, EntityManagerInterface $entityManager): Response
     {
+        $tweet = new Tweet();
+        $form = $this->createForm(TweetType::class, $tweet);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $tweet->setDateTweet(new \DateTime());
+            $tweet->setUser($this->getUser());
+
+            if ($this->getUser()) {
+                $tweet->setUser($this->getUser());
+            }
+
+            $entityManager->persist($tweet);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_tweet_index');
+        }
+
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAll(),
+            'form' => $form->createView(),
         ]);
     }
 
+    // LIKE UN TWEET
+
+    #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
+    public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Vérifier si le like existe déjà
+        $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
+            'tweet' => $tweet,
+            'user' => $user,
+        ]);
+
+        if (!$existingLike) {
+            $like = new Like();
+            $like->setTweet($tweet);
+            $like->setUser($user);
+
+            $entityManager->persist($like);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_tweet_index');
+    }
+
+    // CREER UN TWEET
     #[Route('/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -30,6 +78,7 @@ final class TweetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $tweet->setUser($this->getUser());
             $entityManager->persist($tweet);
             $entityManager->flush();
 
@@ -42,6 +91,7 @@ final class TweetController extends AbstractController
         ]);
     }
 
+    // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
     public function show(Tweet $tweet): Response
     {
@@ -50,6 +100,8 @@ final class TweetController extends AbstractController
         ]);
     }
 
+
+    // EDITER UN TWEET 
     #[Route('/{id}/edit', name: 'app_tweet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
     {
@@ -68,10 +120,12 @@ final class TweetController extends AbstractController
         ]);
     }
 
+
+    // SUPPRIMER UN TWEET
     #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'])]
     public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tweet->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($tweet);
             $entityManager->flush();
         }
