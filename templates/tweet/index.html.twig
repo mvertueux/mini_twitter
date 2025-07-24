@@ -1,52 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil / X{% endblock %}
+{% block title %}Fil d'actualités{% endblock %}
 
 {% block body %}
-    <h1>Tweet index</h1>
-    
+<div class="min-h-screen bg-main-color/40 py-8">
+    <div class="max-w-3xl mx-auto">
 
-    <h2>Publier un nouveau tweet</h2>
+        {# --- Zone publication sticky --- #}
+        <div class="z-10 bg-main-color/20 rounded-xl p-5 mb-6 backdrop-blur border-b-1 border-gray-400">
+            {% include 'tweet/_form.html.twig' with {'form': form} %}
+        </div>
 
-{% include 'tweet/_form.html.twig' with {'form': form} %}
+        {# --- Liste des tweets --- #}
+<div class="space-y-5">
+    {% for tweet in tweets %}
+        <div class="border-t-1 border-gray-400 bg-main-color p-10 shadow-sm">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="font-bold text-white/70">{{ tweet.user.username }}</span>
+                <span class="text-xs text-gray-400">• {{ tweet.dateTweet ? tweet.dateTweet|date('d/m/Y à H:i') : '' }}</span>
+            </div>
+            <div class="text-gray-400 text-[15px] mb-2">
+                {{ tweet.content }}
+            </div>
+            <div class="flex items-center gap-4 pt-1 text-sm">
+                <form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
+                    <button type="submit" class="flex items-center text-gray-400 hover:text-pink-300">
+                        {% if app.user and tweet.isLikedByUser(app.user) %}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="#a8a8a8" viewBox="0 0 24 24" width="20" height="20" class="mr-1">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#a8a8a8" stroke-width="2" viewBox="0 0 24 24" width="20" height="20" class="mr-1">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        {% endif %}
+                        <span>{{ tweet.likes|length }}</span>
+                    </button>
+                </form>
+                <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}" class="text-gray-500 hover:underline">Voir</a>
+                {% if app.user and tweet.user == app.user %}
+                    <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="text-gray-500 hover:underline">Éditer</a>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <p class="text-center text-gray-400">Aucun tweet pour l’instant.</p>
+    {% endfor %}
+</div>
 
-
-    <h2>Liste des tweets</h2>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Content</th>
-                <th>DateTweet</th>
-                <th>Utilisateur</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tweet in tweets %}
-            <tr>
-                <td>{{ tweet.id }}</td>
-                <td>{{ tweet.content }}</td>
-                <td>{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}</td>
-                <td>{{ tweet.user.username }}</td>
-                <td>
-                    <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}">show</a>
-                    <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}">edit</a>
-                    <form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
-                    <button class="btn btn-sm btn-outline-danger">
-                    ❤️ {{ tweet.likes|length }}
-        </button>
-    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_tweet_new') }}">Create new</a>
+    </div>
+</div>
 {% endblock %}
+
