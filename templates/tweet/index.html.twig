@@ -4,6 +4,14 @@
 
 {% block body %}
     <h1>Tweet index</h1>
+    
+
+    <h2>Publier un nouveau tweet</h2>
+
+{% include 'tweet/_form.html.twig' with {'form': form} %}
+
+
+    <h2>Liste des tweets</h2>
 
     <table class="table">
         <thead>
@@ -11,6 +19,7 @@
                 <th>Id</th>
                 <th>Content</th>
                 <th>DateTweet</th>
+                <th>Utilisateur</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,10 +28,16 @@
             <tr>
                 <td>{{ tweet.id }}</td>
                 <td>{{ tweet.content }}</td>
-                <td>{{ tweet.dateTweet ? tweet.dateTweet|date('Y-m-d') : '' }}</td>
+                <td>{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}</td>
+                <td>{{ tweet.user.username }}</td>
                 <td>
                     <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}">show</a>
                     <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}">edit</a>
+                    <form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
+                    <button class="btn btn-sm btn-outline-danger">
+                    ❤️ {{ tweet.likes|length }}
+        </button>
+    </form>
                 </td>
             </tr>
         {% else %}
