@@ -5,7 +5,7 @@
 {% block body %}
 
 <div>
- <h2>Dashboard Admin</h2>
+ <h2>DASHBOARD ADMIN</h2>
 
     <table class="table">
         <thead>
@@ -23,13 +23,13 @@
                 <td>{{ user.email }}</td>
                 {# <td>{{ user.roles }}</td> #}
                 <td>
-                    <a href="{{ path('app_admin_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_admin_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('app_admin_show', {'id': user.id}) }}">Afficher</a>
+                    <a href="{{ path('app_admin_delete', {'id': user.id}) }}">Supprimer</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">Pas d'enregistrements</td>
             </tr>
         {% endfor %}<br>
         </tbody>
