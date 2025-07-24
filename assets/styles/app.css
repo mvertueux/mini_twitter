@@ -8,10 +8,3 @@ body {
 @theme {
   --color-main-color: rgb(27, 27, 27); 
 }
-
-
-/* Style du profil */
-
-.containerProfil {
-  border: 1px xolid red;
-}
