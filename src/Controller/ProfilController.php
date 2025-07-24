@@ -12,6 +12,7 @@ final class ProfilController extends AbstractController
     #[Route('/profil', name: 'app_profil')]
     public function index(): Response
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
