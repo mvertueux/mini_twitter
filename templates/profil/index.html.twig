@@ -1,33 +1,127 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfilController!
-{% endblock %}
+{% block title %}Profil de {{ user.email }}{% endblock %}
 
 {% block body %}
+<div class="max-w-xl mx-auto border border-gray-700 bg-[#16181c] text-white min-h-screen rounded shadow-lg">
 
-	<div class="example-wrapper">
-		<h1>{{ user.email }}</h1>
-	</div>
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+        <div class="flex items-center gap-2">
+            <button>
+			<a href="{{ path('app_tweet_index')}}">
+                <svg class="w-6 h-6 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+			</a>
+            </button>
+            <div>
+                <div class="font-bold text-lg">
+					{% if is_granted('ROLE_USER') %}
+                  		<span> {{ app.user.username }} </span>
+               		{% else %}
+                  		<span> Invité</span>
+               		{% endif %}
+				</div>
+                <div class="text-sm text-gray-400">{{ tweets|length }} posts</div>
+            </div>
+        </div>
+    </div>
 
-	<div class="containerProfil">
+    <!-- (Ex : banner et avatar) -->
+    <div class="h-32 bg-[#212327] w-full"></div>
+    <div class="relative px-6">
+        <div class="absolute -top-12 left-4">
+            <img class="w-24 h-24 rounded-full border-4 border-[#16181c] shadow" src="https://placehold.co/96x96" alt="avatar">
+        </div>
 
-		<div id="containerTweet">
-			{% for tweet in tweets %}
-				{{ tweet.content }}
-				{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}
-			{% endfor %}
-		</div>
-		<div id="containerLike">
-			<p>Section Like</p>
-		</div>
+        <div class="flex justify-end pt-2">
+            <button class="border border-blue-500 text-blue-400 px-4 py-1 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition">Éditer profil</button>
+        </div>
+        <div class="pt-8 pb-4">
+            <div class="font-bold text-xl">
+				{% if is_granted('ROLE_USER') %}
+                  	<span> {{ app.user.username }} </span>
+               	{% else %}
+                  	<span> Invité</span>
+               	{% endif %}	
+			</div>
+            <div class="text-gray-400">{{ user.email }}</div>
+            <div class="mt-2 text-[15px] text-gray-300">Streamer ou description ici...</div>
+            <div class="mt-2 flex items-center text-sm text-gray-400 gap-2">
+                <svg class="w-4 h-4 inline text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                Joined (à remplir)
+            </div>
+            <div class="mt-2 text-sm">
+                <span class="font-bold text-white">0</span>
+                <span class="text-gray-400 mr-2">Following</span>
+                <span class="font-bold text-white">0</span>
+                <span class="text-gray-400">Followers</span>
+            </div>
+        </div>
+    </div>
+    
+    {# Onglets #}
+    <div class="border-b border-gray-700 flex px-4 bg-[#16181c]">
+        <button class="tab-button px-3 py-2 font-semibold text-blue-400 border-b-2 border-blue-500" onclick="showTab('posts')">Posts</button>
+        <button class="tab-button px-3 py-2 text-gray-400 hover:text-white" onclick="showTab('likes')">Likes</button>
+        <button class="tab-button px-3 py-2 text-gray-400 hover:text-white" onclick="showTab('commentaires')">Commentaires</button>
+        <button class="tab-button px-3 py-2 text-gray-400 hover:text-white" onclick="showTab('retweets')">Retweets</button>
+    </div>
 
-		<div id="containerCommente">
-			<p>Section Commente</p>
-		</div>
+    <div class="mb-10 bg-[#16181c]">
+        <!-- Posts -->
+        <div id="tab-posts" class="tab-content">
+            {% for tweet in tweets %}
+                <div class="px-4 py-5 border-b border-gray-700 bg-[#212327] hover:bg-[#23272b]">
+                    <div class="flex gap-3">
+                        <img class="w-10 h-10 rounded-full" src="https://placehold.co/40x40" alt="">
+                        <div class="flex-1">
+                            <div class="text-sm">
+                                <span class="font-bold">{{ user.email }}</span>
+                                <span class="text-gray-400 text-xs ml-2">
+                                    {{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}
+                                </span>
+                            </div>
+                            <div class="mt-1 text-[15px] text-gray-100">
+                                {{ tweet.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-gray-400 px-4 py-8">Aucun tweet pour le moment.</div>
+            {% endfor %}
+        </div>
 
-		<div id="containerRetweet">
-			<p>Section Retweet</p>
-		</div>
+        <!-- Likes -->
+        <div id="tab-likes" class="tab-content hidden px-4 py-8 text-gray-400">
+            Section Like
+        </div>
+        <!-- Commentaires -->
+        <div id="tab-commentaires" class="tab-content hidden px-4 py-8 text-gray-400">
+            Section Commentaires
+        </div>
+        <!-- Retweets -->
+        <div id="tab-retweets" class="tab-content hidden px-4 py-8 text-gray-400">
+            Section Retweet
+        </div>
+    </div>
+</div>
 
-	</div>
+{# Petit JS pour l’onglet #}
+<script>
+function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-button').forEach(el => {
+        el.classList.remove('text-blue-400','border-b-2','border-blue-500','font-semibold');
+        el.classList.add('text-gray-400');
+    });
+
+    document.getElementById('tab-' + tab).classList.remove('hidden');
+    event.target.classList.add('text-blue-400','border-b-2','border-blue-500','font-semibold');
+    event.target.classList.remove('text-gray-400');
+}
+</script>
 {% endblock %}
+
