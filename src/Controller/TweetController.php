@@ -51,7 +51,6 @@ final class TweetController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Vérifier si le like existe déjà
         $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
             'tweet' => $tweet,
             'user' => $user,

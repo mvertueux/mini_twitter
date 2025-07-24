@@ -40,7 +40,7 @@ class TweetRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-        public function findAllOrderedByIdDesc(): array
+    public function findAllOrderedByIdDesc(): array
     {
         return $this->findBy([], ['id' => 'DESC']);
     }
