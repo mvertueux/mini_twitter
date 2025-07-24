@@ -39,7 +39,7 @@ final class TweetController extends AbstractController
         }
 
         return $this->render('tweet/index.html.twig', [
-            'tweets' => $tweetRepository->findAll(),
+            'tweets' => $tweetRepository->findAllOrderedByIdDesc(),
             'form' => $form->createView(),
         ]);
     }
@@ -51,7 +51,6 @@ final class TweetController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Vérifier si le like existe déjà
         $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
             'tweet' => $tweet,
             'user' => $user,
