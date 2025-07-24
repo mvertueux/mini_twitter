@@ -2,5 +2,9 @@
 @source not "../../public";
 
 body {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(27, 27, 27);
+}
+
+@theme {
+  --color-main-color: rgb(27, 27, 27); 
 }
