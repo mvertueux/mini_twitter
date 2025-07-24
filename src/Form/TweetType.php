@@ -15,11 +15,11 @@ class TweetType extends AbstractType
     {
         $builder
             ->add('content')
-            ->add('dateTweet')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('dateTweet')
+            // ->add('user', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'username',
+            // ])
         ;
     }
 

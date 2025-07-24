@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TweetRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Tweet
 {
     #[ORM\Id]
@@ -23,6 +24,7 @@ class Tweet
     private ?\DateTime $dateTweet = null;
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     /**
@@ -179,5 +181,13 @@ class Tweet
         }
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setDateTweetAutomatically(): void
+    {
+        if ($this->dateTweet === null) {
+            $this->dateTweet = new \DateTime();
+        }
     }
 }
