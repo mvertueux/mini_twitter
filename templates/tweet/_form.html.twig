@@ -1,4 +1,16 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div>
+        {{ form_widget(form.content, {
+            'attr': {
+                'class': 'w-full rounded-lg bg-white/80 p-3 text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-main-color resize-none min-h-[80px]',
+                'placeholder': 'Quoi de neuf ?'
+            }
+        }) }}
+        {{ form_errors(form.content) }}
+    </div>
+    <div class="flex justify-end mt-2">
+        <button type="submit" class="bg-white/80 text-main-color rounded-lg px-5 py-2 font-bold hover:bg-white/50 transition">
+            Tweeter
+        </button>
+    </div>
 {{ form_end(form) }}

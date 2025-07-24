@@ -39,7 +39,7 @@ final class TweetController extends AbstractController
         }
 
         return $this->render('tweet/index.html.twig', [
-            'tweets' => $tweetRepository->findAll(),
+            'tweets' => $tweetRepository->findAllOrderedByIdDesc(),
             'form' => $form->createView(),
         ]);
     }
