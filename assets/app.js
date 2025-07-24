@@ -8,3 +8,9 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+
+
+const containerTweet = document.getElementById('containerTweet');
+const containerLike = document.getElementById('containerLike');
+const containerCommente = document.getElementById('containerComment');
+const containerRetweet = document.getElementById('containerRetweet');

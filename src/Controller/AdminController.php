@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 // use DateTime;
+
 use App\Entity\User;
+use App\Entity\Tweet;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-// use App\Repository\TweetRepository;
+use App\Repository\TweetRepository;
+use App\Repository\LikeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,31 +30,22 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    // AFFICHER //
+
     #[Route('/{id}', name: 'app_admin_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, TweetRepository $tweetRepository, LikeRepository $likeRepository): Response
     {
+        $tweets = $tweetRepository->findBy(['user' => $user]);
+        $likes = $likeRepository->findBy(['user' => $user]);
+
         return $this->render('admin/show.html.twig', [
             'user' => $user,
+            'tweets' => $tweets,
+            'likes' => $likes
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_admin_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
+    // SUPPRIMER //
 
     #[Route('/{id}', name: 'app_admin_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
@@ -63,15 +57,4 @@ final class AdminController extends AbstractController
 
         return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    // #[Route('/admin', name: 'app_admin')]
-    // public function index(TweetRepository $tweetRepository): Response
-    // {
-    //     return $this->render('admin/index.html.twig', [
-    //         'controller_name' => 'Dashboard Admin',
-    //         'date' => new DateTime()
-    //         'user_username' => 'Pseudo',
-    //         'tweets' => $tweetRepository->findAll(),
-    //     ]);
-    // }
 }
