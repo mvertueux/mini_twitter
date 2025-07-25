@@ -1,3 +1,76 @@
 <footer>
-    <p>&copy; {{ "now"|date("Y") }} MonProjet. Tous droits réservés.</p>
+	<aside class="fixed top-0 right-0 w-[370px] h-screen bg-main-color border-l border-gray-400 flex flex-col justify-between z-30 transition-transform translate-x-full lg:translate-x-0">
+		<div
+			class="p-4 flex flex-col gap-4 overflow-y-auto" style="max-height:calc(100vh - 120px);">
+			<!-- Subscribe section -->
+			<div class="rounded-xl bg-[#212327] p-4 flex flex-col gap-2 shadow">
+				<span class="font-bold text-white">Abonnez-vous à Premium</span>
+				<span class="text-sm text-gray-400">Abonnez-vous pour débloquer de nouvelles fonctionnalités et, si vous êtes éligible, recevez une part des revenus.</span>
+				<button class="mt-2 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-full w-fit">S'abonner</button>
+			</div>
+
+			<!-- Who to follow -->
+			<div class="rounded-xl bg-[#212327] p-4 flex flex-col gap-4 shadow">
+				<span class="font-bold text-white text-lg">Qui suivre</span>
+				<div
+					class="flex flex-col gap-3">
+					<!-- Suggestion 1 -->
+					<div class="flex items-center justify-between">
+						<div class="flex items-center gap-2">
+							<img src="https://placehold.co/40x40" alt="avatar" class="rounded-full w-8 h-8">
+							<div>
+								<span class="font-semibold text-white text-sm">CORSAIR France</span><br>
+								<span class="text-xs text-gray-400">@CORSAIRFRA</span>
+							</div>
+						</div>
+						<button class="bg-white text-black rounded-full px-4 py-1 text-sm font-semibold">Follow</button>
+					</div>
+					<!-- Suggestion 2 -->
+					<div class="flex items-center justify-between">
+						<div class="flex items-center gap-2">
+							<img src="https://placehold.co/40x40" alt="avatar" class="rounded-full w-8 h-8">
+							<div>
+								<span class="font-semibold text-white text-sm">Tata Vertiga</span><br>
+								<span class="text-xs text-gray-400">@TataVertiga</span>
+							</div>
+						</div>
+						<button class="bg-white text-black rounded-full px-4 py-1 text-sm font-semibold">Follow</button>
+					</div>
+					<!-- Suggestion 3 -->
+					<div class="flex items-center justify-between">
+						<div class="flex items-center gap-2">
+							<img src="https://placehold.co/40x40" alt="avatar" class="rounded-full w-8 h-8">
+							<div>
+								<span class="font-semibold text-white text-sm">RAZER 🇫🇷🇪🇺</span><br>
+								<span class="text-xs text-gray-400">@RazerFrance</span>
+							</div>
+						</div>
+						<button class="bg-white text-black rounded-full px-4 py-1 text-sm font-semibold">Follow</button>
+					</div>
+				</div>
+				<a href="#" class="text-blue-400 text-sm mt-2">Afficher plus</a>
+			</div>
+
+			<!-- Trends / What’s Happening -->
+			<div class="rounded-xl bg-[#212327] p-4 flex flex-col gap-2 shadow">
+				<span class="font-bold text-white text-lg">Ce qui se passe</span>
+				<div>
+					<span class="font-semibold text-gray-300">#M8WIN
+						<span class="ml-1 text-xs">7,046 posts</span>
+					</span>
+					<span class="block font-semibold text-gray-300 mt-1">#GeForceSummer
+						<span class="ml-1 text-xs">16.3K posts</span>
+					</span>
+				</div>
+				<a href="#" class="text-blue-400 text-sm mt-2">Afficher plus</a>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<div class="text-xs text-gray-600 border-t border-gray-400 p-4 flex flex-wrap justify-center gap-2 bg-main-color">
+			<a href="#" class="hover:underline">Conditions d'utilisation</a>
+			<a href="#" class="hover:underline">politique de confidentialité</a>
+			<a href="#" class="hover:underline">Politique relative aux cookies</a>
+		</div>
+	</aside>
 </footer>
