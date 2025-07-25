@@ -46,27 +46,32 @@ final class TweetController extends AbstractController
 
     // LIKE UN TWEET
 
-    #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
-    public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
+#[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
+public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
+{
+    $user = $this->getUser();
 
-        $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
-            'tweet' => $tweet,
-            'user' => $user,
-        ]);
+    $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
+        'tweet' => $tweet,
+        'user' => $user,
+    ]);
 
-        if (!$existingLike) {
-            $like = new Like();
-            $like->setTweet($tweet);
-            $like->setUser($user);
+    if ($existingLike) {
 
-            $entityManager->persist($like);
-            $entityManager->flush();
-        }
+        $entityManager->remove($existingLike);
+    } else {
 
-        return $this->redirectToRoute('app_tweet_index');
+        $like = new Like();
+        $like->setTweet($tweet);
+        $like->setUser($user);
+
+        $entityManager->persist($like);
     }
+
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_tweet_index');
+}
 
     // CREER UN TWEET
     #[Route('/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]

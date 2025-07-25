@@ -123,15 +123,15 @@ class Tweet
         return $this;
     }
 
-    public function isLikedByUser(User $user): bool
-{
-    foreach ($this->likes as $like) {
+    public function isLikedBy(User $user): bool
+    {
+    foreach ($this->getLikes() as $like) {
         if ($like->getUser() === $user) {
             return true;
         }
     }
     return false;
-}
+    }
 
     /**
      * @return Collection<int, Commentaire>

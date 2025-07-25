@@ -38,10 +38,10 @@
 		<!--banner et avatar-->
 		<div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
 			<div class="relative w-full max-w-lg mx-auto bg-[#16181c] rounded-xl overflow-hidden shadow-2xl border border-gray-800">
-				<button class="absolute top-8 right-6 px-4 py-1 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600">Save</button>
+				<button class="absolute top-8 right-6 px-4 py-1 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600">Sauvegarder</button>
 
 				<div class="px-8 py-8">
-					<div class="text-xl font-bold mb-6">Edit profile</div>
+					<div class="text-xl font-bold mb-6">Modifier profil</div>
 					<div class="mx-auto flex justify-center mb-[-40px]">
 						<div class="relative w-28 h-28">
 							<img src="https://placehold.co/110x110" class="object-cover rounded-full border-4 border-[#16181c] shadow-lg" alt="Avatar">
@@ -54,15 +54,15 @@
 					</div>
 					<form class="flex flex-col gap-4 mt-10">
 						<div>
-							<label class="text-sm text-gray-400">Name</label>
+							<label class="text-sm text-gray-400">Nom</label>
 							<input class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white" value="{{ app.user.username }}">
 						</div>
 						<div>
 							<label class="text-sm text-gray-400">Bio</label>
-							<textarea rows="2" class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white">Mettre bio ici</textarea>
+							<textarea rows="2" class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white">{{ user.description }}</textarea>
 						</div>
 						<div>
-							<label class="text-sm text-gray-400">Location</label>
+							<label class="text-sm text-gray-400">Adresse</label>
 							<input class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white">
 						</div>
 					</form>
@@ -85,12 +85,11 @@
 							{{ app.user.username }}
 						</span>
 					{% else %}
-						<span>Ï
-																																																																																																																																					Invité</span>
+						<span>Aucun nom d'utilisateur</span>																																																																																																																													Invité</span>
 					{% endif %}
 				</div>
 				<div class="text-gray-400">{{ user.email }}</div>
-				<div class="mt-2 text-[15px] text-gray-300">Votre description...</div>
+				<div class="mt-2 text-[15px] text-gray-300">{{ user.description }}</div>
 				<div class="mt-2 flex items-center text-sm text-gray-400 gap-2">
 					<svg class="w-4 h-4 inline text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
 					Joined (à remplir)
