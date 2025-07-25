@@ -1,4 +1,4 @@
-<nav class="w-full h-16 bg-main-color border-b-1 border-[#2f3336] transition-transform lg:hidden z-50">
+<nav class="absolute top-0 right-0 w-full h-16 bg-main-color border-b-1 border-[#2f3336] transition-transform md:hidden z-50">
 	<div class="flex justify-between items-center m-5">
 		<a href="#" class="flex flex-col text-xs text-gray-500 hover:text-blue-400">
 			<svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 20 18">
@@ -18,7 +18,7 @@
 	</div>
 </nav>
 
-<aside id="logo-sidebar" class="fixed z-40 w-64 h-screen transition-transform -translate-x-full lg:translate-x-0" aria-label="Sidebar">
+<aside id="logo-sidebar" class="fixed z-40 w-64 h-screen transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
 	<div class="relative h-full px-3 py-4 overflow-y-auto bg-main-color border-r-1 border-[#2f3336]">
 		<a href="{{ path('app_tweet_index') }}" class="flex items-center ps-2.5 mb-5">
 			<svg class="w-6 h-6 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 300 300">
@@ -86,7 +86,7 @@
 		</ul>
 	</div>
 </aside>
-<nav class="fixed bottom-0 left-0 w-full h-20 bg-main-color border-t-1 border-gray-400 shadow transition-transform lg:hidden z-50">
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-main-color border-t-1 border-gray-400 shadow transition-transform md:hidden z-50">
 	<div class="flex justify-evenly items-center m-5">
 		<a href="#" class="flex flex-col text-xs text-gray-500 hover:text-blue-400">
 			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewbox="0 0 16 16">
