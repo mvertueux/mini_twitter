@@ -41,6 +41,10 @@
 								</button>
 							</form>
 							<a href="{{ path('app_tweet_show', {'id': tweet.id}) }}" class="text-gray-500 hover:underline">Voir</a>
+							<form action="{{ path('app_tweet_commentaire', {'id': tweet.id}) }}" method="post">
+								<textarea class="text-white" name="content" rows="2" placeholder="Votre commentaire..." required></textarea>
+								<button type="submit" class="text-white">Commenter</button>
+							</form>
 							{% if app.user and tweet.user == app.user %}
 								<a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}" class="text-gray-500 hover:underline">Éditer</a>
 							{% endif %}

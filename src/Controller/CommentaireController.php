@@ -17,31 +17,33 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CommentaireController extends AbstractController
 {
     #[Route(name: 'app_commentaire_index', methods: ['GET'])]
-    public function index(Commentaire $commentaire): Response
+    public function index(CommentaireRepository $commentaireRepository): Response
     {
         return $this->render('commentaire/index.html.twig', [
-            'commentaire' => $commentaire,
-            'tweet' => $commentaire,
+            'commentaires' => $commentaireRepository->findAll(),
         ]);
     }
 
     // NOUVEAU COMMENTAIRE
 
-    #[Route('/new/{id}', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TweetRepository $tweetRepository, int $id): Response
+    #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
         $tweet = $tweetRepository->find($id);
         if (!$tweet) {
-            return $this->redirectToRoute('app_tweet');
+            throw $this->createNotFoundException('Tweet introuvable.');
         }
 
         $commentaire = new Commentaire();
-        $commentaire->setTweet($tweet);
 
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $commentaire->setUser($this->getUser());
+
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
@@ -51,7 +53,9 @@ final class CommentaireController extends AbstractController
         return $this->render('commentaire/new.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form,
-            'tweet' => $tweet
+
+            'tweet' => $tweet,
+
         ]);
     }
 
