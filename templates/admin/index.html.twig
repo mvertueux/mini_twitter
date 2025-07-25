@@ -56,7 +56,7 @@
                         <tr class="border-b dark:border-gray-700">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ user.username }}</th>
                             <td class="px-4 py-3">{{ user.email }}</td>
-                            <td class="px-4 py-3">Mettre Rôle</td>
+                            <td class="px-4 py-3">{{ user.roles|join(', ') }}</td>
                             <td class="px-4 py-3"></td>
                             <td class="px-4 py-3">$2999</td>
                             <td class="px-4 py-3 flex items-center justify-end">
