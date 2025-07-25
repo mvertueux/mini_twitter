@@ -26,16 +26,16 @@ final class CommentaireController extends AbstractController
 
     // NOUVEAU COMMENTAIRE
 
-    #[Route('/new/{id}', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TweetRepository $tweetRepository, int $id): Response
+    #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
         $tweet = $tweetRepository->find($id);
         if (!$tweet) {
             throw $this->createNotFoundException('Tweet introuvable.');
         }
 
         $commentaire = new Commentaire();
-        $commentaire->setTweet($tweet);
 
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
@@ -53,7 +53,9 @@ final class CommentaireController extends AbstractController
         return $this->render('commentaire/new.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form,
+
             'tweet' => $tweet,
+
         ]);
     }
 
