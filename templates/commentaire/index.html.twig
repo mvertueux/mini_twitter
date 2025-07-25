@@ -3,9 +3,10 @@
 {% block title %}Commentaire index{% endblock %}
 
 {% block body %}
+<div class="text-white">
     <h1>Commentaire index</h1>
 
-    <table class="table">
+    <table class="table text-white">
         <thead>
             <tr>
                 <th>Id</th>
@@ -34,4 +35,5 @@
     </table>
 
     <a href="{{ path('app_commentaire_new') }}">Create new</a>
+</div>
 {% endblock %}
