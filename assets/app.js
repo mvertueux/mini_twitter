@@ -8,3 +8,33 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+
+window.showTab = function(tab, event) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.tab-button').forEach(el => {
+    el.classList.remove('text-blue-400', 'border-b-2', 'border-blue-500', 'font-semibold');
+    el.classList.add('text-gray-400');
+  });
+  const content = document.getElementById('tab-' + tab);
+  if(content) content.classList.remove('hidden');
+  if(event && event.target) {
+    event.target.classList.add('text-blue-400', 'border-b-2', 'border-blue-500', 'font-semibold');
+    event.target.classList.remove('text-gray-400');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('editProfileModal');
+  const btn = document.getElementById('editProfileBtn');
+  if (btn && modal) {
+    btn.onclick = function() {
+      modal.classList.remove('hidden');
+    };
+    function closeEditProfile() {
+      modal.classList.add('hidden');
+    }
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeEditProfile();
+    });
+  }
+});
