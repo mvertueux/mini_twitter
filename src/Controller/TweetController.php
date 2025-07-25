@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Entity\Like;
+use App\Entity\Commentaire;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,34 +45,54 @@ final class TweetController extends AbstractController
         ]);
     }
 
-    // LIKE UN TWEET
+    // COMMENTER UN TWEET
 
-#[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
-public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
-{
-    $user = $this->getUser();
+    #[Route('/{id}/commentaire', name: 'app_tweet_commentaire', methods: ['POST'])]
+    public function commentaire(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $content = $request->request->get('content');
 
-    $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
-        'tweet' => $tweet,
-        'user' => $user,
-    ]);
+        $commentaire = new Commentaire();
+        $commentaire->setUser($user);
+        $commentaire->setTweet($tweet);
+        $commentaire->setDateComment(new \DateTime());
+        $commentaire->setContent($content);
 
-    if ($existingLike) {
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
 
-        $entityManager->remove($existingLike);
-    } else {
-
-        $like = new Like();
-        $like->setTweet($tweet);
-        $like->setUser($user);
-
-        $entityManager->persist($like);
+        return $this->redirectToRoute('app_tweet_index');
     }
 
-    $entityManager->flush();
+    // LIKE UN TWEET
 
-    return $this->redirectToRoute('app_tweet_index');
-}
+    #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
+    public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
+            'tweet' => $tweet,
+            'user' => $user,
+        ]);
+
+        if ($existingLike) {
+
+            $entityManager->remove($existingLike);
+        } else {
+
+            $like = new Like();
+            $like->setTweet($tweet);
+            $like->setUser($user);
+
+            $entityManager->persist($like);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_tweet_index');
+    }
 
     // CREER UN TWEET
     #[Route('/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]

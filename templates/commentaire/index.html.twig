@@ -12,6 +12,7 @@
                 <th>Id</th>
                 <th>Content</th>
                 <th>DateComment</th>
+                <th>Utilisateur</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                 <td>{{ commentaire.id }}</td>
                 <td>{{ commentaire.content }}</td>
                 <td>{{ commentaire.dateComment ? commentaire.dateComment|date('Y-m-d') : '' }}</td>
+                <td>{{ commentaire.user.username }}</td>
                 <td>
                     <a href="{{ path('app_commentaire_show', {'id': commentaire.id}) }}">show</a>
                     <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}">edit</a>

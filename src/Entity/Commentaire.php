@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Commentaire
 {
     #[ORM\Id]
@@ -77,5 +78,13 @@ class Commentaire
         $this->tweet = $tweet;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setDateCommentValue(): void
+    {
+        if ($this->dateComment === null) {
+            $this->dateComment = new \DateTime();
+        }
     }
 }
