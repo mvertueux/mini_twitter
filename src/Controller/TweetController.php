@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Entity\Like;
+use App\Entity\Commentaire;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,6 +43,26 @@ final class TweetController extends AbstractController
             'tweets' => $tweetRepository->findAllOrderedByIdDesc(),
             'form' => $form->createView(),
         ]);
+    }
+
+    // COMMENTER UN TWEET
+
+    #[Route('/{id}/commentaire', name: 'app_tweet_commentaire', methods: ['POST'])]
+    public function commentaire(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $content = $request->request->get('content');
+
+        $commentaire = new Commentaire();
+        $commentaire->setUser($user);
+        $commentaire->setTweet($tweet);
+        $commentaire->setDateComment(new \DateTime());
+        $commentaire->setContent($content);
+
+        $entityManager->persist($commentaire);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_tweet_index');
     }
 
     // LIKE UN TWEET

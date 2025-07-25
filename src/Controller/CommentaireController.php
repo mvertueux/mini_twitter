@@ -30,6 +30,11 @@ final class CommentaireController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
 
+        $tweet = $tweetRepository->find($id);
+        if (!$tweet) {
+            throw $this->createNotFoundException('Tweet introuvable.');
+        }
+
         $commentaire = new Commentaire();
 
         $form = $this->createForm(CommentaireType::class, $commentaire);
@@ -48,6 +53,9 @@ final class CommentaireController extends AbstractController
         return $this->render('commentaire/new.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form,
+
+            'tweet' => $tweet,
+
         ]);
     }
 
