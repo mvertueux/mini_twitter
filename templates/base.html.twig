@@ -22,8 +22,9 @@
 		{% endif %}
 		<main class="ml-0 mr-0 {% if is_granted('ROLE_USER') %}lg:ml-64 lg:mr-[370px] p-4{% endif %} "> {% block body %}{% endblock %}
 			</main>
-			{% if is_granted('ROLE_USER') %}
-				{% include 'layouts/footer.html.twig' %}
-			{% endif %}
-		</body>
-	</html>
+		{% if is_granted('ROLE_USER') %}
+			{% include 'layouts/footer.html.twig' %}
+		{% endif %}
+    </div>
+	</body>
+</html>
