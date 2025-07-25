@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Tweet;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
+use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,17 +17,27 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CommentaireController extends AbstractController
 {
     #[Route(name: 'app_commentaire_index', methods: ['GET'])]
-    public function index(CommentaireRepository $commentaireRepository): Response
+    public function index(Commentaire $commentaire): Response
     {
         return $this->render('commentaire/index.html.twig', [
-            'commentaires' => $commentaireRepository->findAll(),
+            'commentaire' => $commentaire,
+            'tweet' => $commentaire,
         ]);
     }
 
-    #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // NOUVEAU COMMENTAIRE
+
+    #[Route('/new/{id}', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, TweetRepository $tweetRepository, int $id): Response
     {
+        $tweet = $tweetRepository->find($id);
+        if (!$tweet) {
+            return $this->redirectToRoute('app_tweet');
+        }
+
         $commentaire = new Commentaire();
+        $commentaire->setTweet($tweet);
+
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
@@ -39,6 +51,7 @@ final class CommentaireController extends AbstractController
         return $this->render('commentaire/new.html.twig', [
             'commentaire' => $commentaire,
             'form' => $form,
+            'tweet' => $tweet
         ]);
     }
 
@@ -71,7 +84,7 @@ final class CommentaireController extends AbstractController
     #[Route('/{id}', name: 'app_commentaire_delete', methods: ['POST'])]
     public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$commentaire->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $commentaire->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($commentaire);
             $entityManager->flush();
         }
