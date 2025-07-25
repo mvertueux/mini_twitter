@@ -12,7 +12,7 @@
             <tr>
                 <th>Id</th>
                 <th>Email</th>
-                {# <th>Role</th> #}
+                <th>Role</th>
             </tr>
         </thead>
 
@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
-                {# <td>{{ user.roles }}</td> #}
+                <td>{{ user.roles|join(', ') }}</td>
                 <td>
                     <a href="{{ path('app_admin_show', {'id': user.id}) }}">Afficher</a>
                     <a href="{{ path('app_admin_delete', {'id': user.id}) }}">Supprimer</a>
