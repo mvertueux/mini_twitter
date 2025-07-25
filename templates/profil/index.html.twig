@@ -35,7 +35,40 @@
 			</div>
 		</div>
 
-		<!-- (Ex : banner et avatar) -->
+		<!--banner et avatar-->
+		<div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
+			<div class="relative w-full max-w-lg mx-auto bg-[#16181c] rounded-xl overflow-hidden shadow-2xl border border-gray-800">
+				<button class="absolute top-8 right-6 px-4 py-1 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600">Save</button>
+
+				<div class="px-8 py-8">
+					<div class="text-xl font-bold mb-6">Edit profile</div>
+					<div class="mx-auto flex justify-center mb-[-40px]">
+						<div class="relative w-28 h-28">
+							<img src="https://placehold.co/110x110" class="object-cover rounded-full border-4 border-[#16181c] shadow-lg" alt="Avatar">
+							<div class="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-black hover:bg-opacity-20 rounded-full">
+								<svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path d="M7 16a4 4 0 1 1 10 0M21 21l-6-6M4 7V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/>
+								</svg>
+							</div>
+						</div>
+					</div>
+					<form class="flex flex-col gap-4 mt-10">
+						<div>
+							<label class="text-sm text-gray-400">Name</label>
+							<input class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white" value="{{ app.user.username }}">
+						</div>
+						<div>
+							<label class="text-sm text-gray-400">Bio</label>
+							<textarea rows="2" class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white">Mettre bio ici</textarea>
+						</div>
+						<div>
+							<label class="text-sm text-gray-400">Location</label>
+							<input class="w-full mt-1 bg-transparent border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500 text-white">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 		<div class="h-32 bg-[#212327] w-full"></div>
 		<div class="relative px-6">
 			<div class="absolute -top-12 left-4">
@@ -43,7 +76,7 @@
 			</div>
 
 			<div class="flex justify-end pt-2">
-				<button class="border border-blue-500 text-blue-400 px-4 py-1 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition">Éditer profil</button>
+				<button id="editProfileBtn" class="border border-blue-500 text-blue-400 px-4 py-1 rounded-full font-semibold hover:bg-blue-500 hover:text-white transition">Éditer profil</button>
 			</div>
 			<div class="pt-8 pb-4">
 				<div class="font-bold text-xl">
@@ -133,5 +166,16 @@ document.getElementById('tab-' + tab).classList.remove('hidden');
 event.target.classList.add('text-blue-400', 'border-b-2', 'border-blue-500', 'font-semibold');
 event.target.classList.remove('text-gray-400');
 }
+
+const modal = document.getElementById('editProfileModal');
+  document.getElementById('editProfileBtn').onclick = function() {
+    modal.classList.remove('hidden');
+  }
+  function closeEditProfile() {
+    modal.classList.add('hidden');
+  }
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeEditProfile();
+  });
 	</script>
 {% endblock %}
