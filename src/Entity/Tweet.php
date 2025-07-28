@@ -20,7 +20,7 @@ class Tweet
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $dateTweet = null;
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
@@ -125,12 +125,12 @@ class Tweet
 
     public function isLikedBy(User $user): bool
     {
-    foreach ($this->getLikes() as $like) {
-        if ($like->getUser() === $user) {
-            return true;
+        foreach ($this->getLikes() as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
         }
-    }
-    return false;
+        return false;
     }
 
     /**
