@@ -80,12 +80,14 @@
 		</div>
 	</div>
 
-	<div class="text-white">
+	<div class="text-white m-4">
 		<p>Commentaires</p><br>
 
 		{% for commentaire in tweet.commentaires %}
-			<p>{{ commentaire.dateComment ? commentaire.dateComment| date("d/m/y H:i") : "" }}</p>
-			<p>{{ commentaire.content }}</p><br>
+		<div class="mb-6">
+			<p>{{ commentaire.user.username }} - {{ commentaire.dateComment ? commentaire.dateComment|date("d/m/y H:i") : "" }}</p>
+			<p>{{ commentaire.content }}</p>
+		</div>
   		{% endfor %}
 
 	</div>

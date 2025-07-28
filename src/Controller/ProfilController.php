@@ -24,30 +24,30 @@ final class ProfilController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-            // Création du formulaire d'avatar
-    $form = $this->createForm(ProfilType::class, $user);
-    $form->handleRequest($request);
+        // Création du formulaire d'avatar
+        $form = $this->createForm(ProfilType::class, $user);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $avatarFile = $form->get('avatar')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $avatarFile = $form->get('avatar')->getData();
 
-        if ($avatarFile) {
-            $newFilename = uniqid().'.'.$avatarFile->guessExtension();
-            try {
-                $avatarFile->move(
-                    $this->getParameter('avatars_directory'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                $this->addFlash('error', "Erreur lors de l'envoi du fichier.");
+            if ($avatarFile) {
+                $newFilename = uniqid() . '.' . $avatarFile->guessExtension();
+                try {
+                    $avatarFile->move(
+                        $this->getParameter('avatars_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', "Erreur lors de l'envoi du fichier.");
+                }
+                $user->setAvatar($newFilename);
             }
-            $user->setAvatar($newFilename);
-        }
-        $em->persist($user);
+            $em->persist($user);
             $em->flush();
             $this->addFlash('success', "Photo de profil mise à jour !");
             return $this->redirectToRoute('app_profil');
-    }
+        }
         $tweets = $user->getTweets();
         $likeTweets = $likeRepository->findTweetsLikedByUser($user);
         return $this->render('profil/index.html.twig', [
@@ -55,6 +55,17 @@ final class ProfilController extends AbstractController
             $user = $this->getUser(),
             "tweets" => $tweets,
             'likeTweets' => $likeTweets,
+            "form" => $form->createView(),
+        ]);
+
+        // Commentaires par tweet par utilisateur
+        $commentaires = $user->getComment();
+        $commentTweets = $commentRepository->findTweetsCommentByUser($user);
+        return $this->render('profil/index.html.twig', [
+            "user" => $user,
+            $user = $this->getUser(),
+            "commentaires" => $commentaires,
+            'commentTweets' => $commentTweets,
             "form" => $form->createView(),
         ]);
     }
