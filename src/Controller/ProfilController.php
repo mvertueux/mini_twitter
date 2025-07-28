@@ -2,25 +2,55 @@
 
 namespace App\Controller;
 
+use App\Form\AvatarType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
+
 
 final class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
-    public function index(): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+
+            // Création du formulaire d'avatar
+    $form = $this->createForm(AvatarType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $avatarFile = $form->get('avatar')->getData();
+
+        if ($avatarFile) {
+            $newFilename = uniqid().'.'.$avatarFile->guessExtension();
+            try {
+                $avatarFile->move(
+                    $this->getParameter('avatars_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                $this->addFlash('error', "Erreur lors de l'envoi du fichier.");
+            }
+            $user->setAvatar($newFilename);
+            $em->flush();
+            $this->addFlash('success', "Photo de profil mise à jour !");
+            return $this->redirectToRoute('app_profil');
+        }
+    }
         $tweets = $user->getTweets();
         return $this->render('profil/index.html.twig', [
-            "user" => $user,
-            "tweets" => $tweets
+            'user' => $this->getUser(),
+            "tweets" => $tweets,
+            "form" => $form->createView(),
         ]);
     }
+
 }
