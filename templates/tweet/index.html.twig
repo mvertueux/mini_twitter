@@ -29,7 +29,7 @@
 										<span class="font-bold">{{ tweet.user.username }}</span>
 										•
 										<span class="text-gray-400 text-xs">
-											{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}
+											{{ tweet.dateTweet ? tweet.dateTweet| date("d/m/y H:i") : "" }}
 										</span>
 									</div>
 									<div class="flex flex-row gap-4">

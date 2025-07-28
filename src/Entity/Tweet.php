@@ -20,7 +20,7 @@ class Tweet
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $dateTweet = null;
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
