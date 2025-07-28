@@ -70,7 +70,7 @@ final class ProfilController extends AbstractController
         ]);
     }
 
-    // #[Route('/profil/modifier', name: 'app_profil_update', methods:["POST"])]
+    // #[Route('/profil/modifier', name: 'app_profil_update', methods: ["POST"])]
     // public function updateProfil(Request $request, EntityManagerInterface $entityManager): Response
     // {
     //     $user = $this->getUser();
