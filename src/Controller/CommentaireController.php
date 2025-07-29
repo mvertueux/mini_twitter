@@ -13,16 +13,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/commentaire')]
+#[IsGranted('ROLE_USER')]
 final class CommentaireController extends AbstractController
 {
+
+
+
     #[Route(name: 'app_commentaire_index', methods: ['GET'])]
     public function index(CommentaireRepository $commentaireRepository): Response
     {
-        return $this->render('commentaire/index.html.twig', [
-            'commentaires' => $commentaireRepository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_tweet_index');
     }
 
     // NOUVEAU COMMENTAIRE

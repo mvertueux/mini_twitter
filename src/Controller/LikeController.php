@@ -10,16 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted as AttributeIsGranted;
 
 #[Route('/like')]
+#[AttributeIsGranted('ROLE_USER')]
 final class LikeController extends AbstractController
 {
     #[Route(name: 'app_like_index', methods: ['GET'])]
     public function index(LikeRepository $likeRepository): Response
     {
-        return $this->render('like/index.html.twig', [
-            'likes' => $likeRepository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_tweet_index');
     }
 
     #[Route('/new', name: 'app_like_new', methods: ['GET', 'POST'])]
@@ -71,7 +71,7 @@ final class LikeController extends AbstractController
     #[Route('/{id}', name: 'app_like_delete', methods: ['POST'])]
     public function delete(Request $request, Like $like, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$like->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $like->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($like);
             $entityManager->flush();
         }

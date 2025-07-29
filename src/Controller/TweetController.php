@@ -12,8 +12,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/tweet')]
+#[IsGranted('ROLE_USER')]
 final class TweetController extends AbstractController
 {
 
@@ -77,6 +79,20 @@ final class TweetController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
+
+
+    // // AFFICHE LES COMMENTAIRES D'UN TWEET PAR UTILISATEUR
+    // $commentairesParUtilisateur = [];
+
+    // foreach ($tweet->getCommentaires() as $commentaire) {
+    //     $username = $commentaire->getUser()->getUsername();
+    //     $commentairesParUtilisateur[$username][] = $commentaire;
+    // }
+
+    // return $this->render('tweet/show.html.twig', [
+    //     'tweet' => $tweet,
+    //     'commentaires_groupes' => $commentairesParUtilisateur,
+    // ]);
 
 
     // LIKE UN TWEET
