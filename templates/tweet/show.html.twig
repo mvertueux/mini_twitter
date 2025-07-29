@@ -3,7 +3,7 @@
 {% block title %}
 	{{ app.user.username }}
 	sur X:
-																																			"{{ tweet.content }}"
+																																				"{{ tweet.content }}"
 {% endblock %}
 
 {% block body %}
@@ -43,7 +43,7 @@
 						{% endif %}
 					</div>
 				</div>
-				<div class="mt-1 text-[15px] text-gray-100">
+				<div class="mt-1 text-[15px] text-gray-100 break-all overflow-hidden">
 					{{ tweet.content }}
 				</div>
 				<div class="flex justify-between items-center gap-4 border-y border-gray-700 py-2 mt-6">
@@ -113,7 +113,7 @@
 							{% endif %}
 						</div>
 					</div>
-					<div class="mt-1 text-[15px] text-gray-100">
+					<div class="mt-1 text-[15px] text-gray-100 break-all overflow-hidden">
 						{{ commentaire.content }}
 					</div>
 					<form action="{{ path('app_commentaire_like', {'id': commentaire.id}) }}" method="post" style="display:inline;">
