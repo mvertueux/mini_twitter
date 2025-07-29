@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tweet;
+use App\Entity\Like;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
@@ -100,5 +101,34 @@ final class CommentaireController extends AbstractController
         }
 
         return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // LIKE UN COMMENTAIRE
+
+    #[Route('/{id}/like', name: 'app_commentaire_like', methods: ['POST'])]
+    public function like(Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
+            'commentaire' => $commentaire,
+            'user' => $user,
+        ]);
+
+        if ($existingLike) {
+
+            $entityManager->remove($existingLike);
+        } else {
+
+            $like = new Like();
+            $like->setCommentaire($commentaire);
+            $like->setUser($user);
+
+            $entityManager->persist($like);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_profil');
     }
 }
