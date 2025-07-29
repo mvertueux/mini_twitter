@@ -3,7 +3,7 @@
 {% block title %}
 	{{ app.user.username }}
 	sur X:
-																																					"{{ tweet.content }}"
+	"{{ tweet.content }}"
 {% endblock %}
 
 {% block body %}
@@ -43,7 +43,7 @@
 						{% endif %}
 					</div>
 				</div>
-				<div class="mt-1 text-[15px] text-gray-100">
+				<div class="mt-1 text-[15px] text-gray-100 break-all overflow-hidden">
 					{{ tweet.content }}
 				</div>
 				<div class="flex justify-between items-center gap-4 border-y border-gray-700 py-2 mt-6">
@@ -119,22 +119,18 @@
 							{% endif %}
 						</div>
 					</div>
-					<div class="mt-1 text-[15px] text-gray-100">
+					<div class="mt-1 text-[15px] text-gray-100 break-all overflow-hidden">
 						{{ commentaire.content }}
 					</div>
 					<form action="{{ path('app_commentaire_like', {'id': commentaire.id}) }}" method="post" style="display:inline;">
 						<button type="submit" class="group cursor-pointer flex items-center text-gray-400 transition">
 							{% if commentaire.isLikedBy(app.user) %}
-								<svg class="w-[24px] h-[24px] text-[#f91880] transition group-hover:drop-shadow-[0_0_6px_#f91880]"
-									aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-									fill="currentColor" viewBox="0 0 24 24">
+								<svg class="w-[24px] h-[24px] text-[#f91880] transition group-hover:drop-shadow-[0_0_6px_#f91880]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
 									<path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
 								</svg>
 							{% else %}
-								<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#f91880] group-hover:drop-shadow-[0_0_6px_#f91880]"
-									aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-									<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+								<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#f91880] group-hover:drop-shadow-[0_0_6px_#f91880]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
+									<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
 								</svg>
 							{% endif %}
 							<span class="ml-1 transition {{ commentaire.isLikedBy(app.user) ? 'text-[#f91880] group-hover:drop-shadow-[0_0_6px_#f91880]' : 'group-hover:text-[#f91880] group-hover:drop-shadow-[0_0_6px_#f91880]' }}">
