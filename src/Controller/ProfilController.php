@@ -59,6 +59,17 @@ final class ProfilController extends AbstractController
             "form" => $form->createView(),
             'commentTweets' => $commentTweets,
         ]);
+
+        // Commentaires par tweet par utilisateur
+        $commentaires = $user->getComment();
+        $commentTweets = $commentRepository->findTweetsCommentByUser($user);
+        return $this->render('profil/index.html.twig', [
+            "user" => $user,
+            $user = $this->getUser(),
+            "commentaires" => $commentaires,
+            'commentTweets' => $commentTweets,
+            "form" => $form->createView(),
+        ]);
     }
 
     // #[Route('/profil/modifier', name: 'app_profil_update', methods: ["POST"])]

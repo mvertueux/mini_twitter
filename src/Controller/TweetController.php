@@ -81,6 +81,20 @@ final class TweetController extends AbstractController
     }
 
 
+    // // AFFICHE LES COMMENTAIRES D'UN TWEET PAR UTILISATEUR
+    // $commentairesParUtilisateur = [];
+
+    // foreach ($tweet->getCommentaires() as $commentaire) {
+    //     $username = $commentaire->getUser()->getUsername();
+    //     $commentairesParUtilisateur[$username][] = $commentaire;
+    // }
+
+    // return $this->render('tweet/show.html.twig', [
+    //     'tweet' => $tweet,
+    //     'commentaires_groupes' => $commentairesParUtilisateur,
+    // ]);
+
+
     // LIKE UN TWEET
 
     #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
