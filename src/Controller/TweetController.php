@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class TweetController extends AbstractController
 {
 
-    // POSTER NOUVEAU TWEET
+// POSTER NOUVEAU TWEET
     #[Route(name: 'app_tweet_index', methods: ['GET', 'POST'])]
     public function index(Request $request, TweetRepository $tweetRepository, EntityManagerInterface $entityManager): Response
     {
