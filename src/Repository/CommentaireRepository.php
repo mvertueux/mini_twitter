@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Commentaire;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,6 +16,14 @@ class CommentaireRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commentaire::class);
     }
+
+    public function findCommentsMakeByUser(User $user): array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery("SELECT commentaire FROM App\Entity\Commentaire commentaire JOIN App\Entity\Tweet tweet WITH commentaire.tweet = tweet WHERE commentaire.user = :user")->setParameter("user", $user);
+        return $query->getResult();
+    }
+
 
     //    /**
     //     * @return Commentaire[] Returns an array of Commentaire objects
