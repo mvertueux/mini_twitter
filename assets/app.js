@@ -14,12 +14,6 @@ document.getElementById('avatarImg').onclick = function () {
   document.querySelector('input[type=file][name$="[avatar]"]').click();
 };
 
-document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
-  if (e.target.files && e.target.files[0]) {
-    document.getElementById('avatarImg').src = URL.createObjectURL(e.target.files[0]);
-  }
-});
-
 window.showTab = function (tab, event) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(el => {
@@ -33,23 +27,6 @@ window.showTab = function (tab, event) {
     event.target.classList.remove('text-gray-400');
   }
 };
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   const modal = document.getElementById('editProfileModal');
-//   const btn = document.getElementById('editProfileBtn');
-//   if (btn && modal) {
-//     btn.onclick = function () {
-//       modal.classList.remove('hidden');
-//     };
-//     function closeEditProfile() {
-//       modal.classList.add('hidden');
-//     }
-//     modal.addEventListener('click', function (e) {
-//       if (e.target === modal) closeEditProfile();
-//     });
-//   }
-// });
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById('editProfileModal');
@@ -89,5 +66,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-
 })
+
+document.addEventListener('DOMContentLoaded', function () {
+    var buttons = document.querySelectorAll('.comment-toggle');
+    if (!buttons.length) {
+        console.log('Aucun bouton .comment-toggle trouvé');
+        return;
+    }
+    buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const targetSelector = btn.getAttribute('data-target');
+            const target = document.querySelector(targetSelector);
+            if (target) {
+                target.classList.toggle('hidden');
+                const svg = btn.querySelector('svg');
+                if (svg) {
+                    svg.classList.toggle('rotate-180');
+                }
+            }
+        });
+    });
+});
+
+document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
+  if (e.target.files && e.target.files[0]) {
+    document.getElementById('avatarImg').src = URL.createObjectURL(e.target.files[0]);
+  }
+});
