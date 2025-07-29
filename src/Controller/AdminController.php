@@ -23,10 +23,11 @@ final class AdminController extends AbstractController
 {
 
     #[Route(name: 'app_admin_index')]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, TweetRepository $tweetRepository): Response
     {
         return $this->render('admin/index.html.twig', [
             'users' => $userRepository->findAll(),
+            'tweets' => $tweetRepository->findAll()
         ]);
     }
 
