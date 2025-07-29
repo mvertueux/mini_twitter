@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ProfilType;
+use App\Repository\CommentaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 final class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
-    public function index(LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
+    public function index(CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -50,12 +51,14 @@ final class ProfilController extends AbstractController
         }
         $tweets = $user->getTweets();
         $likeTweets = $likeRepository->findTweetsLikedByUser($user);
+        $commentTweets = $commentaireRepository->findCommentsMakeByUser($user);
         return $this->render('profil/index.html.twig', [
             "user" => $user,
             $user = $this->getUser(),
             "tweets" => $tweets,
             'likeTweets' => $likeTweets,
             "form" => $form->createView(),
+            'commentTweets' => $commentTweets,
         ]);
 
         // Commentaires par tweet par utilisateur
