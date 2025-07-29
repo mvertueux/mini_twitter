@@ -12,18 +12,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
 use App\Repository\LikeRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class ProfilController extends AbstractController
 {
+
     #[Route('/profil', name: 'app_profil')]
+    #[IsGranted('ROLE_USER')]
     public function index(CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
 
         // Création du formulaire d'avatar
         $form = $this->createForm(ProfilType::class, $user);
