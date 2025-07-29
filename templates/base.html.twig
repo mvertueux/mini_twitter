@@ -18,18 +18,28 @@
 					{% include 'layouts/header.html.twig' %}
 				{% endif %}
 			</header>
-			    <main class="w-full mt-10 ml-0 mr-0 md:col-span-1"> 
-                    {% block body %}
-                    {% endblock %}
+			<main class="w-full mt-10 ml-0 mr-0 md:col-span-1"> {% block body %}{% endblock %}
 				</main>
-			<div class="flex md:justify-start justify-end">
-				{% if is_granted('ROLE_USER') %}
-					{% include 'layouts/footer.html.twig' %}
-				{% endif %}
+				<div class="flex md:justify-start justify-end">
+					{% if is_granted('ROLE_USER') %}
+						{% include 'layouts/footer.html.twig' %}
+					{% endif %}
+				</div>
 			</div>
-		</div>
-		{% block javascripts %}
-    		{{ encore_entry_script_tags('app') }}
-		{% endblock %}
-	</body>
-</html>
+			{% block javascripts %}
+				{{ encore_entry_script_tags('app') }}
+			{% endblock %}
+
+			{# --- Modal tweet --- #}
+
+			<div id="tweetModal" class="fixed inset-0 z-50 flex pt-20 items-start justify-center bg-blue-300/10 hidden">
+				<div class="bg-main-color rounded-lg p-6 max-w-2xl w-full shadow-lg relative sm:max-w-xl">
+					<button id="closeModalBtn" class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl">&times;</button>
+					<div class="w-full">
+						{{ render(controller('App\\Controller\\PartialController::tweetModalForm')) }}
+					</div>
+				</div>
+			</div>
+			
+		</body>
+	</html>

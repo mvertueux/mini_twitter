@@ -10,10 +10,6 @@ Turbo.session.drive = false;
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
-document.getElementById('avatarImg').onclick = function () {
-  document.querySelector('input[type=file][name$="[avatar]"]').click();
-};
-
 window.showTab = function (tab, event) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(el => {
@@ -89,8 +85,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('openTweetModalBtn');
+    const modal = document.getElementById('tweetModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    if (openBtn && modal) {
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    }
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    }
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+});
+
 document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
   if (e.target.files && e.target.files[0]) {
     document.getElementById('avatarImg').src = URL.createObjectURL(e.target.files[0]);
   }
 });
+
+document.getElementById('avatarImg').onclick = function () {
+  document.querySelector('input[type=file][name$="[avatar]"]').click();
+};
