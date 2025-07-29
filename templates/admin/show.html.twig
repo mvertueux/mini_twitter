@@ -31,9 +31,9 @@
 						</div>
 						<div class="mt-1 text-[15px] text-gray-100">
 							{{ tweet.content }}
-                            <div class="px-4 py-3 flex items-center justify-end">
-                                {{ include('tweet/_delete_form.html.twig') }}
-                            </div>
+							<div class="px-4 py-3 flex items-center justify-end">
+								{{ include('tweet/_delete_form.html.twig') }}
+							</div>
 						</div>
 
 						{% set commentId = 'comments-' ~ tweet.id %}
@@ -55,6 +55,9 @@
 												{{ commentaire.dateComment ? commentaire.dateComment|date('d/m/y H:i') : '' }}
 											</span>
 											<div class="mt-1 text-white text-sm">{{ commentaire.content }}</div>
+											<div class="px-4 py-3 flex items-center justify-end">
+												{{ include('commentaire/_delete_form.html.twig') }}
+											</div>
 										</div>
 									{% else %}
 										<span class="text-gray-400 text-xs">(Aucun commentaire)</span>
