@@ -1,11 +1,13 @@
+<!--MENU TOP FORMAT MOBILE-->
+
 <nav class="absolute top-0 right-0 w-full h-16 bg-main-color border-b-1 border-[#2f3336] transition-transform md:hidden z-50">
 	<div class="flex justify-between items-center m-5">
-		<a href="#" class="flex flex-col text-xs text-gray-500 hover:text-blue-400">
+		<a href="#" id="openProfileMenu" class="flex flex-col text-xs text-gray-500 hover:text-blue-400">
 			{% if app.user and app.user.avatar %}
-						<img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
-					{% else %}
-						<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
-					{% endif %}
+				<img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
+			{% else %}
+				<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+			{% endif %}
 		</a>
 		<a href="#" class="flex flex-col text-gray-500 hover:text-blue-400">
 			<svg class="w-5 h-5 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 300 300">
@@ -19,6 +21,69 @@
 		</a>
 	</div>
 </nav>
+
+<!-- MENU PROFIL SLIDE LEFT -->
+<aside id="profile-menu"
+  class="fixed z-50 top-0 left-0 w-72 max-w-full h-screen bg-main-color shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out border-r-1 border-[#2f3336]">
+    <div class="relative h-full px-3 overflow-y-auto flex flex-col items-start pl-3 py-6">
+        <button id="closeProfileMenu" class="absolute top-4 right-4 text-3xl text-gray-600 hover:text-red-500 font-bold">&times;</button>
+        {% if app.user and app.user.avatar %}
+            <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Avatar" class="w-20 h-20 rounded-full object-cover mb-2">
+        {% else %}
+            <img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-20 h-20 rounded-full object-cover mb-2">
+        {% endif %}
+        <p class="text-lg font-semibold mb-1 text-white">
+            {{ app.user ? app.user.username : "Invité" }}
+        </p>
+        <p class="text-gray-400 text-xs mb-4">
+            {{ app.user ? app.user.email : "" }}
+        </p>
+		<ul class="space-y-2 font-medium">
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_tweet_index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house" viewbox="0 0 16 16">
+					<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+				</svg>
+				<span class="ms-3">Accueil</span>
+			</a>
+			<a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-envelope" viewbox="0 0 16 16">
+					<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+				</svg>
+				<span class="ms-3">Message</span>
+			</a>
+			<a href="{{ path('app_profil') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people" viewbox="0 0 16 16">
+					<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+				</svg>
+				<span class="ms-3">Profil</span>
+			</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_admin_index')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-grid" viewbox="0 0 16 16">
+					<path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+				</svg>
+				<span class="flex-1 ms-3 whitespace-nowrap">Paramètres</span>
+				<span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Admin</span>
+			</a>
+        {% endif %}
+        	<form action="{{ path('app_logout') }}" method="post" class="mt-8 w-full flex">
+            	<button type="submit" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewbox="0 0 16 16">
+					<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+					<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+				</svg>
+				<span class="ms-3">Déconnexion</span>
+				</button>
+        	</form>
+		</ul>
+    </div>
+</aside>
+
+<div id="profile-menu-backdrop" class="hidden fixed inset-0 z-40 backdrop-blur"></div>
+
+<!--ASIDE FORMAT LAPTOP-->
 
 <aside id="logo-sidebar" class="fixed z-40 w-64 h-screen transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
 	<div class="relative h-full px-3 py-4 overflow-y-auto bg-main-color border-r-1 border-[#2f3336]">
@@ -100,7 +165,10 @@
 		</ul>
 	</div>
 </aside>
-<nav class="fixed bottom-0 left-0 w-full h-20 bg-main-color border-t-1 border-gray-400 shadow transition-transform md:hidden z-50">
+
+<!--MENU BOTTOM FORMAT MOBILE-->
+
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-main-color border-t-1 border-gray-400 shadow transition-transform md:hidden z-40">
 	<div class="flex justify-evenly items-center m-5">
 		<a href="#" class="flex flex-col text-xs text-gray-500 hover:text-blue-400">
 			<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewbox="0 0 16 16">
