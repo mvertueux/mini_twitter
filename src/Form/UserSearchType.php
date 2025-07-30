@@ -12,11 +12,12 @@ class UserSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('query', SearchType::class, [
+            ->add('search', SearchType::class, [
                 'required' => false,
                 'attr' => [
-                    'placeholder' => "Nom de l'utilisateur",
+                    'placeholder' => "Utilisateur",
                 ],
+                'label' => false,
             ]);
     }
 
