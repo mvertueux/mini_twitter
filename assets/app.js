@@ -87,24 +87,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // MODAL EDIT ET DELETE TWEET A VOIR
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     const openBtn = document.getElementById('openTweetModalBtn');
-//     const modal = document.getElementById('tweetModal');
-//     const closeBtn = document.getElementById('closeModalBtn');
+document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('openTweetModalBtn');
+    const modal = document.getElementById('tweetModal');
+    const closeBtn = document.getElementById('closeModalBtn');
 
-//     if (openBtn && modal) {
-//         openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
-//     }
-//     if (closeBtn && modal) {
-//         closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-//     }
+    if (openBtn && modal) {
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    }
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    }
     
-//     modal.addEventListener('click', (e) => {
-//         if (e.target === modal) {
-//             modal.classList.add('hidden');
-//         }
-//     });
-// });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+});
 
 document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
   if (e.target.files && e.target.files[0]) {
