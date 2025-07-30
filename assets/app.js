@@ -65,45 +65,45 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 document.addEventListener('DOMContentLoaded', function () {
-    var buttons = document.querySelectorAll('.comment-toggle');
-    if (!buttons.length) {
-        console.log('Aucun bouton .comment-toggle trouvé');
-        return;
-    }
-    buttons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const targetSelector = btn.getAttribute('data-target');
-            const target = document.querySelector(targetSelector);
-            if (target) {
-                target.classList.toggle('hidden');
-                const svg = btn.querySelector('svg');
-                if (svg) {
-                    svg.classList.toggle('rotate-180');
-                }
-            }
-        });
+  var buttons = document.querySelectorAll('.comment-toggle');
+  if (!buttons.length) {
+    console.log('Aucun bouton .comment-toggle trouvé');
+    return;
+  }
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const targetSelector = btn.getAttribute('data-target');
+      const target = document.querySelector(targetSelector);
+      if (target) {
+        target.classList.toggle('hidden');
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.classList.toggle('rotate-180');
+        }
+      }
     });
+  });
 });
 
 // MODAL EDIT ET DELETE TWEET A VOIR
 
-document.addEventListener('DOMContentLoaded', function() {
-    const openBtn = document.getElementById('openTweetModalBtn');
-    const modal = document.getElementById('tweetModal');
-    const closeBtn = document.getElementById('closeModalBtn');
+document.addEventListener('DOMContentLoaded', function () {
+  const openBtn = document.getElementById('openTweetModalBtn');
+  const modal = document.getElementById('tweetModal');
+  const closeBtn = document.getElementById('closeModalBtn');
 
-    if (openBtn && modal) {
-        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+  }
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
     }
-    if (closeBtn && modal) {
-        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    }
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-        }
-    });
+  });
 });
 
 document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {

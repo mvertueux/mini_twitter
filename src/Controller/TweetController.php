@@ -9,6 +9,7 @@ use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +42,7 @@ final class TweetController extends AbstractController
 
             $entityManager->persist($tweet);
             $entityManager->flush();
-            return $this->redirectToRoute('app_tweet_index');
+            return $this->redirectBack($request);
         }
 
         return $this->render('tweet/index.html.twig', [
@@ -67,7 +68,7 @@ final class TweetController extends AbstractController
         $entityManager->persist($commentaire);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_tweet_index');
+        return $this->redirectBack($request);
     }
 
 
@@ -101,7 +102,7 @@ final class TweetController extends AbstractController
     // LIKE UN TWEET
 
     #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
-    public function like(Tweet $tweet, EntityManagerInterface $entityManager): Response
+    public function like(Tweet $tweet, EntityManagerInterface $entityManager, Request $request,): Response
     {
         $user = $this->getUser();
 
@@ -124,7 +125,7 @@ final class TweetController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_tweet_index');
+        return $this->redirectBack($request);
     }
 
     // AFFICHER DETAIL D'UN TWEET
@@ -147,7 +148,7 @@ final class TweetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tweet_show', ['id' => $tweet->getId()]);
         }
 
         return $this->render('tweet/edit.html.twig', [
@@ -166,6 +167,30 @@ final class TweetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectBack($request);
+    }
+
+    public function redirectBack(Request $request, string $fallbackRoute = 'app_tweet_index'): RedirectResponse
+    {
+        // 1) on regarde s'il y a un "redirect" envoyé par le formulaire (voir plus bas)
+        $target = $request->request->get('redirect')
+            ?? $request->query->get('redirect')
+            ?? $request->headers->get('referer'); // 2) sinon on prend le Referer
+
+        // 3) sécurité: on n'autorise que les URLs locales
+        if ($target) {
+            // URL relative => OK
+            if (!preg_match('#^https?://#i', $target)) {
+                return $this->redirect($target);
+            }
+            // URL absolue => vérifier le host
+            $host = parse_url($target, PHP_URL_HOST);
+            if ($host === $request->getHost()) {
+                return $this->redirect($target);
+            }
+        }
+
+        // Fallback si rien ou externe
+        return $this->redirectToRoute($fallbackRoute);
     }
 }

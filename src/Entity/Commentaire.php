@@ -33,7 +33,7 @@ class Commentaire
     /**
      * @var Collection<int, Like>
      */
-    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'commentaire')]
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'commentaire', orphanRemoval: true, cascade: ['remove'])]
     private Collection $likes;
 
     public function __construct()
