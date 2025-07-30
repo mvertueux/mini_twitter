@@ -9,6 +9,7 @@ use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,7 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class TweetController extends AbstractController
 {
 
-// POSTER NOUVEAU TWEET
+    // POSTER NOUVEAU TWEET
     #[Route(name: 'app_tweet_index', methods: ['GET', 'POST'])]
     public function index(Request $request, TweetRepository $tweetRepository, EntityManagerInterface $entityManager): Response
     {
@@ -28,16 +29,18 @@ final class TweetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $tweet->setDateTweet(new \DateTime());
             $tweet->setUser($this->getUser());
 
-            if ($this->getUser()) {
-                $tweet->setUser($this->getUser());
+            $image = $form->get('imageFile')->getData();
+
+            if ($image) {
+                $newFilename = uniqid() . '.' . $image->guessExtension();
+                $image->move($this->getParameter('kernel.project_dir') . '/public/uploads/media', $newFilename);
+                $tweet->setMedia($newFilename);
             }
 
             $entityManager->persist($tweet);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_tweet_index');
         }
 
@@ -122,28 +125,6 @@ final class TweetController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_tweet_index');
-    }
-
-    // CREER UN TWEET
-    #[Route('/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $tweet = new Tweet();
-        $form = $this->createForm(TweetType::class, $tweet);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $tweet->setUser($this->getUser());
-            $entityManager->persist($tweet);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('tweet/new.html.twig', [
-            'tweet' => $tweet,
-            'form' => $form,
-        ]);
     }
 
     // AFFICHER DETAIL D'UN TWEET

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PHPUnit\TextUI\Configuration\File;
 
 #[ORM\Entity(repositoryClass: TweetRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -47,6 +48,18 @@ class Tweet
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $media = null;
+
+    private ?File $imageFile = null;
+
+    public function setImageFile(?File $file): void
+    {
+        $this->imageFile = $file;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
 
     public function __construct()
     {
