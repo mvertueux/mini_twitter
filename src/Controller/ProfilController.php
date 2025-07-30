@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
 use App\Repository\LikeRepository;
+use App\Repository\TweetRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -19,7 +20,7 @@ final class ProfilController extends AbstractController
 
     #[Route('/profil', name: 'app_profil')]
     #[IsGranted('ROLE_USER')]
-    public function index(CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
+    public function index(TweetRepository $tweetRepository, CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -48,42 +49,26 @@ final class ProfilController extends AbstractController
             $this->addFlash('success', "Photo de profil mise à jour !");
             return $this->redirectToRoute('app_profil');
         }
-        $tweets = $user->getTweets();
+        $tweets = $tweetRepository->findByUserOrderedByIdDesc($user);
         $likeTweets = $likeRepository->findTweetsLikedByUser($user);
-        $commentTweets = $commentaireRepository->findCommentsMakeByUser($user);
+        $commentTweets = $commentaireRepository->findByUserOrderedByIdDesc($user);
         return $this->render('profil/index.html.twig', [
             "user" => $user,
-            $user = $this->getUser(),
             "tweets" => $tweets,
             'likeTweets' => $likeTweets,
             "form" => $form->createView(),
             'commentTweets' => $commentTweets,
         ]);
 
-        // Commentaires par tweet par utilisateur
-        $commentaires = $user->getComment();
-        $commentTweets = $commentRepository->findTweetsCommentByUser($user);
-        return $this->render('profil/index.html.twig', [
-            "user" => $user,
-            $user = $this->getUser(),
-            "commentaires" => $commentaires,
-            'commentTweets' => $commentTweets,
-            "form" => $form->createView(),
-        ]);
+        // // Commentaires par tweet par utilisateur
+        // $commentaires = $user->getComment();
+        // $commentTweets = $commentaireRepository->findByUserOrderedByIdDesc($user);
+        // return $this->render('profil/index.html.twig', [
+        //     "user" => $user,
+        //     $user = $this->getUser(),
+        //     "commentaires" => $commentaires,
+        //     'commentTweets' => $commentTweets,
+        //     "form" => $form->createView(),
+        // ]);
     }
-
-    // #[Route('/profil/modifier', name: 'app_profil_update', methods: ["POST"])]
-    // public function updateProfil(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $user = $this->getUser();
-    //     $username = $request->request->get("username");
-    //     $description = $request->request->get("description");
-    //     if ($username && $description) {
-    //         $user->setUsername($username);
-    //         $user->setDescription($description);
-    //         $entityManager->persist($user);
-    //         $entityManager->flush();
-    //     }
-    //     return $this->redirectToRoute('app_profil');
-    // }
 }
