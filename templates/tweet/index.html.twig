@@ -9,7 +9,7 @@
 			class="max-w-3xl">
 
 			{# --- Zone publication --- #}
-			<div class="z-10 bg-main-color/20 p-5 backdrop-blur border-b border-gray-700">
+			<div class="z-10 bg-main-color/20 p-5 backdrop-blur border-b border-[#2f3336]">
 				{% include 'tweet/_form.html.twig' with {'form': form} %}
 			</div>
 
@@ -17,10 +17,12 @@
 			<div class="space-y-5">
 				{% for tweet in tweets %}
 					<a href="{{ path('app_tweet_show', {'id': tweet.id}) }}" class="text-gray-500">
-						<div class="px-4 py-5 border-b border-gray-700 bg-[#000000] hover:bg-[#080808]">
+						<div class="px-4 py-5 border-b border-[#2f3336] bg-[#000000] hover:bg-[#080808]">
 							<div class="flex gap-3">
 								{% if tweet.user and tweet.user.avatar %}
-									<img src="{{ asset('uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full">
+									<div href="{{ path('app_profil')}}">
+										<img src="{{ asset('uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full">
+									</div>
 								{% else %}
 									<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
 								{% endif %}
@@ -47,6 +49,11 @@
 									<div class="mt-1 text-[15px] text-gray-100 break-all overflow-hidden">
 										{{ tweet.content }}
 									</div>
+									{% if tweet.media %}
+										<div class="mt-3">
+											<img src="{{ asset('uploads/media/' ~ tweet.media)}}" alt="Image du tweet" class="rounded-lg max-h-96 object-cover">
+										</div>
+									{% endif %}
 									<div class="flex justify-between items-center gap-4 py-4">
 										<div class="group flex justify-center items-center gap-1 cursor-pointer transition duration-200">
 											<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
