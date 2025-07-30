@@ -10,6 +10,7 @@ use App\Repository\CommentaireRepository;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -83,7 +84,8 @@ final class CommentaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+            $tweet = $commentaire->getTweet();
+            return $this->redirectToRoute('app_tweet_show', ['id' => $tweet->getId()]);
         }
 
         return $this->render('commentaire/edit.html.twig', [
@@ -109,7 +111,7 @@ final class CommentaireController extends AbstractController
     // LIKE UN COMMENTAIRE
 
     #[Route('/{id}/like', name: 'app_commentaire_like', methods: ['POST'])]
-    public function like(Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    public function like(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -132,6 +134,30 @@ final class CommentaireController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_profil');
+        return $this->redirectBack($request);
+    }
+
+    public function redirectBack(Request $request, string $fallbackRoute = 'app_tweet_index'): RedirectResponse
+    {
+        // 1) on regarde s'il y a un "redirect" envoyé par le formulaire (voir plus bas)
+        $target = $request->request->get('redirect')
+            ?? $request->query->get('redirect')
+            ?? $request->headers->get('referer'); // 2) sinon on prend le Referer
+
+        // 3) sécurité: on n'autorise que les URLs locales
+        if ($target) {
+            // URL relative => OK
+            if (!preg_match('#^https?://#i', $target)) {
+                return $this->redirect($target);
+            }
+            // URL absolue => vérifier le host
+            $host = parse_url($target, PHP_URL_HOST);
+            if ($host === $request->getHost()) {
+                return $this->redirect($target);
+            }
+        }
+
+        // Fallback si rien ou externe
+        return $this->redirectToRoute($fallbackRoute);
     }
 }

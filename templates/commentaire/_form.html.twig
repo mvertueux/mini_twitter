@@ -1,4 +1,24 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div>
+	<div class="flex gap-3 items-start w-full">
+		{% if app.user and app.user.avatar %}
+			<img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Avatar" class="w-11 h-11 rounded-full object-cover">
+		{% else %}
+			<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-11 h-11 rounded-full object-cover">
+		{% endif %}
+
+		<div class="flex-1">
+			{{ form_widget(form.content, {
+            'attr': {
+                'class': 'w-full p-3 text-lg border-b border-[#2f3336] text-white focus:outline-none focus:ring-2 focus:ring-main-color resize-none min-h-[80px]',
+                'placeholder': 'Quoi de neuf ?'
+            }
+        }) }}
+			<div class="flex group justify-between items-center mt-2">
+			<button type="submit" class=" bg-[#eff3f4] text-[#000000] px-5 py-2 rounded-full font-semibold cursor-pointer hover:bg-[#c2c2c2] hover:text-[#000000] transition">
+				Poster
+			</button>
+		</div>
+		{{ form_errors(form.content) }}
+	</div>
+</div></div>{{ form_end(form) }}
