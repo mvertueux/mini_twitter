@@ -28,6 +28,7 @@ class Like
     private ?Tweet $tweet = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
     private ?Commentaire $commentaire = null;
 
     public function getId(): ?int
