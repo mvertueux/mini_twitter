@@ -85,26 +85,43 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// MODAL EDIT ET DELETE TWEET A VOIR
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     const openBtn = document.getElementById('openTweetModalBtn');
-//     const modal = document.getElementById('tweetModal');
-//     const closeBtn = document.getElementById('closeModalBtn');
+document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('openTweetModalBtn');
+    const modal = document.getElementById('tweetModal');
+    const closeBtn = document.getElementById('closeModalBtn');
 
-//     if (openBtn && modal) {
-//         openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
-//     }
-//     if (closeBtn && modal) {
-//         closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-//     }
+    if (openBtn && modal) {
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+    }
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    }
     
-//     modal.addEventListener('click', (e) => {
-//         if (e.target === modal) {
-//             modal.classList.add('hidden');
-//         }
-//     });
-// });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+});
+
+// MENU BURGER
+
+document.getElementById('openProfileMenu').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('profile-menu').classList.remove('-translate-x-full');
+    document.getElementById('profile-menu-backdrop').classList.remove('hidden');
+});
+document.getElementById('closeProfileMenu').addEventListener('click', function(){
+    document.getElementById('profile-menu').classList.add('-translate-x-full');
+    document.getElementById('profile-menu-backdrop').classList.add('hidden');
+});
+document.getElementById('profile-menu-backdrop').addEventListener('click', function(){
+    document.getElementById('profile-menu').classList.add('-translate-x-full');
+    document.getElementById('profile-menu-backdrop').classList.add('hidden');
+});
+
+// AUTRES
 
 document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
   if (e.target.files && e.target.files[0]) {
