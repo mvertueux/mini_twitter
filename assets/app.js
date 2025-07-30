@@ -65,24 +65,24 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 document.addEventListener('DOMContentLoaded', function () {
-    var buttons = document.querySelectorAll('.comment-toggle');
-    if (!buttons.length) {
-        console.log('Aucun bouton .comment-toggle trouvé');
-        return;
-    }
-    buttons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const targetSelector = btn.getAttribute('data-target');
-            const target = document.querySelector(targetSelector);
-            if (target) {
-                target.classList.toggle('hidden');
-                const svg = btn.querySelector('svg');
-                if (svg) {
-                    svg.classList.toggle('rotate-180');
-                }
-            }
-        });
+  var buttons = document.querySelectorAll('.comment-toggle');
+  if (!buttons.length) {
+    console.log('Aucun bouton .comment-toggle trouvé');
+    return;
+  }
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const targetSelector = btn.getAttribute('data-target');
+      const target = document.querySelector(targetSelector);
+      if (target) {
+        target.classList.toggle('hidden');
+        const svg = btn.querySelector('svg');
+        if (svg) {
+          svg.classList.toggle('rotate-180');
+        }
+      }
     });
+  });
 });
 
 
