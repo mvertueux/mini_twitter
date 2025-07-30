@@ -20,7 +20,7 @@ final class UserController extends AbstractController
         $users = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $query = $form->get('query')->getData();
+            $query = $form->get('search')->getData();
             $users = $userRepository->searchByName($query);
         } else {
             $users = $userRepository->findAll();
