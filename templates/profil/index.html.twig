@@ -76,7 +76,7 @@
 										</svg>
 									</span>
 								</div>
-							{% endif %}	
+							{% endif %}
 						</label>
 					</div>
 
@@ -94,8 +94,8 @@
 						<input type="file" id="avatarInput" name="{{ form.avatar.vars.full_name }}" class="hidden" accept="image/*" onchange="previewAvatar(event)">
 					</div>
 					<button type="submit" class="absolute top-8 right-6 px-4 py-1  text-[#000000] bg-[#eff3f4] rounded-full font-semibold cursor-pointer hover:bg-[#c2c2c2] transition">
-					Enregistrer
-				</button>
+						Enregistrer
+					</button>
 					<div>
 						{{ form_row(form.username) }}
 						{{ form_row(form.description) }}
@@ -112,7 +112,7 @@
 		<div class="relative px-6">
 			<div class="absolute -top-12 left-4">
 				{% if user.avatar %}
-					<img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar" class="rounded-full w-25 h-25 bg-black">
+					<img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar" class="rounded-full w-25 h-25 bg-black border-3 border-[#000000]">
 				{% else %}
 					<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar par défaut" class="rounded-full w-25 h-25">
 				{% endif %}
@@ -393,11 +393,17 @@
 				<a href="{{ path('app_tweet_show', {'id': tweet.id}) }}" class="text-gray-500">
 					<div class="px-4 py-5 border-b border-gray-700 bg-[#000000] hover:bg-[#080808] transition">
 						<div class="flex gap-3">
-							<img class="w-10 h-10 rounded-full" src="https://placehold.co/40x40" alt="">
+							{% if tweet.user and tweet.user.avatar %}
+								<div href="{{ path('app_profil')}}">
+									<img src="{{ asset('uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full">
+								</div>
+							{% else %}
+								<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
+							{% endif %}
 							<div class="flex-1">
 								<div class="flex justify-between items-center gap-2">
 									<div class="text-sm">
-										<span class="font-bold">{{ app.user.username }}</span>
+										<span class="font-bold">{{ tweet.user.username }}</span>
 										•
 										<span class="text-gray-400 text-xs">
 											{{ tweet.dateTweet ? tweet.dateTweet| date("d/m/y H:i") : "" }}

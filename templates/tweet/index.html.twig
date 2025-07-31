@@ -16,25 +16,27 @@
 			{# --- Liste des tweets --- #}
 			<div class="space-y-5">
 				{% for tweet in tweets %}
-					<a href="{{ path('app_tweet_show', {'id': tweet.id}) }}" class="text-gray-500">
+					<article onclick="window.location.href='{{ path('app_tweet_show', {'id': tweet.id}) }}'" class="text-gray-500 cursor-pointer">
 						<div class="px-4 py-1 pt-3 border-b border-[#2f3336] bg-[#000000] hover:bg-[#080808] transition duration-200">
 							<div class="flex gap-3">
-								{% if tweet.user and tweet.user.avatar %}
-									<div href="{{ path('app_profil')}}">
-										<img src="{{ asset('uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full">
-									</div>
-								{% else %}
-									<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
-								{% endif %}
-								<div class="flex-1 w-full">
-									<div class="flex justify-between items-center gap-2">
-										<div class="text-sm text-white">
-											<span class="font-bold">{{ tweet.user.username }}</span>
-											•
-											<span class="text-gray-400 text-xs">
-												{{ tweet.dateTweet ? tweet.dateTweet| date("d/m/y H:i") : "" }}
-											</span>
+								<a href="{{ path('profil_user', {'id': tweet.user.id}) }}" class= "cursor-pointer hover:underline shrink-0">
+									{% if tweet.user and tweet.user.avatar %}
+										<div href="{{ path('app_profil')}}">
+											<img src="{{ asset('uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full">
 										</div>
+									{% else %}
+										<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
+									{% endif %}
+									<div class="flex-1 w-full">
+										<div class="flex justify-between items-center gap-2">
+											<div class="text-sm text-white">
+												<span class="font-bold">{{ tweet.user.username }}</span>
+												•
+												<span class="text-gray-400 text-xs">
+													{{ tweet.dateTweet ? tweet.dateTweet| date("d/m/y H:i") : "" }}
+												</span>
+											</div>
+										</a>
 										<div class="flex flex-row gap-4">
 											{% if app.user and tweet.user == app.user %}
 												{{ include('tweet/_delete_form.html.twig') }}
@@ -127,11 +129,12 @@
 												</span>
 											</div>
 										</div>
+
 									</div>
 								</div>
 							</div>
 						</div>
-					</a>
+					</article>
 				{% else %}
 					<p class="text-center text-gray-400">Aucun tweet pour l'instant.</p>
 				{% endfor %}
