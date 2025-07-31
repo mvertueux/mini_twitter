@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
+
 document.addEventListener('DOMContentLoaded', function () {
   var buttons = document.querySelectorAll('.comment-toggle');
   if (!buttons.length) {
@@ -121,7 +122,7 @@ document.getElementById('profile-menu-backdrop').addEventListener('click', funct
   document.getElementById('profile-menu-backdrop').classList.add('hidden');
 });
 
-// AUTRES
+// AVATARS
 
 document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('change', function (e) {
   if (e.target.files && e.target.files[0]) {
@@ -129,6 +130,22 @@ document.querySelector('input[type=file][name$="[avatar]"]').addEventListener('c
   }
 });
 
-document.getElementById('avatarImg').onclick = function () {
-  document.querySelector('input[type=file][name$="[avatar]"]').click();
-};
+// BANNIERE
+
+function previewBanner(event) {
+    const input = event.target;
+    const file = input.files && input.files[0];
+    const img = document.getElementById('bannerImg');
+    if (file && img) {
+        img.src = URL.createObjectURL(file);
+    }
+}
+
+document.getElementById('bannerInput')?.addEventListener('change', function(e) {
+    const [file] = e.target.files
+    if (file) {
+        document.getElementById('bannerImg').src = URL.createObjectURL(file)
+    }
+});
+
+
