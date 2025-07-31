@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ProfilType;
 use App\Entity\User;
 use App\Form\UserSearchType;
@@ -14,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\LikeRepository;
 use App\Repository\TweetRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -74,12 +74,12 @@ final class ProfilController extends AbstractController
                 $user->setProfilBanierre($newFilename);
             }
             if ($this->isCsrfTokenValid('delete_banniere' . $user->getId(), $request->request->get('_token'))) {
-            $bannerPath = $this->getParameter('banners_directory') . '/' . $user->getProfilBanierre();
-            if (file_exists($bannerPath)) {
-                @unlink($bannerPath);
-            }
-            $user->setProfilBanierre(null);
-            $this->addFlash('success', 'Bannière supprimée !');
+                $bannerPath = $this->getParameter('banners_directory') . '/' . $user->getProfilBanierre();
+                if (file_exists($bannerPath)) {
+                    @unlink($bannerPath);
+                }
+                $user->setProfilBanierre(null);
+                $this->addFlash('success', 'Bannière supprimée !');
             }
             $em->persist($user);
             $em->flush();
