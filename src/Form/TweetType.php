@@ -23,12 +23,12 @@ class TweetType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '5M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'maxSize' => '200M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4'],
                         'mimeTypesMessage' => 'Merci de choisir une image au format JPG, PNG, WebP.',
                     ]),
                 ],
-                'attr' => ['accept' => 'image/*'],
+                'attr' => ['accept' => 'image/*, video/mp4'],
             ]);;
     }
 
