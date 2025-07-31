@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ app.user.username }} / X
+	{{ app.user.username }}
+	/ X
 {% endblock %}
 
 {% block body %}
@@ -36,39 +37,84 @@
 		</div>
 
 		<div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
-			<div
-				class="relative w-full max-w-lg mx-auto bg-[#000000] rounded-xl overflow-hidden shadow-2xl border border-gray-800">
+			<div class="relative w-full max-w-lg mx-auto bg-[#000000] rounded-xl overflow-hidden shadow-2xl border border-gray-800">
 
-				<!-- Début Formulaire-->
 				{{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'class': 'p-10', 'data-turbo': 'false'}}) }}
-				<button type="submit" class="absolute top-8 right-6 px-4 py-1 border border-blue-500 text-blue-400 rounded-full font-semibold cursor-pointer hover:bg-blue-500 hover:text-white transition">
-					Sauvegarder
-				</button>
 
 				<div>
 					<div class="text-xl font-bold mb-6">Modifier profil</div>
-					<div class="mx-auto flex justify-center">
-						<div class="relative w-28 h-28">
 
-							<img id="avatarImg" src="{{ user.avatar ? asset('uploads/avatars/' ~ user.avatar) : 'https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg' }}" class="mb-10 object-cover rounded-full border-2 border-[#2c2c2c] shadow-lg cursor-pointer" alt="Avatar">
-						</div>
-						<div style="display: none;">
-							{{ form_row(form.avatar, {'attr': {'id': 'avatarInput'}}) }}
-						</div>
+					<!-- Bannière -->
+					<div class="relative h-36 w-full rounded-lg bg-gray-800 mb-12 overflow-hidden group">
+						<input type="file" id="bannerInput" name="{{ form.profilBanierre.vars.full_name }}" class="hidden" accept="image/*" onchange="previewBanner(event)">
+						<label for="bannerInput" class="absolute inset-0 cursor-pointer z-20">
+							{% if user.profilBanierre and app.user and app.user.id == user.id %}
+								<img id="bannerImg" src="{{ asset('uploads/banners/' ~ user.profilBanierre) }}" alt="Bannière" class="object-cover w-full h-full">
+								<div class="absolute inset-0 flex flex-row items-center justify-center gap-4">
+									<span class="bg-black/30 rounded-full p-3 hover:bg-black/50 transition">
+										<svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewbox="0 0 24 24">
+											<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 18V8a1 1 0 0 1 1-1h1.5l1.707-1.707A1 1 0 0 1 8.914 5h6.172a1 1 0 0 1 .707.293L17.5 7H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/>
+											<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+										</svg>
+									</span>
+									<form method="post" action="{{ path('user_delete_banniere', {'id': user.id}) }}" onsubmit="return confirm('Supprimer la bannière ?');">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete_banniere' ~ user.id) }}">
+										<button type="submit" class="bg-black/30 rounded-full p-3 hover:bg-black/50 transition border-none">
+											<svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewbox="0 0 24 24">
+												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+											</svg>
+										</button>
+									</form>
+								</div>
+							{% else %}
+								<img id="bannerImg" src="https://mercerie-saint-pierre.com/30134-thickbox_default/tissu-doublure-toscane-antistatique-uni-gris-fonce.jpg" alt="Bannière" class="object-cover w-full h-full">
+								<div class="absolute inset-0 flex items-center justify-center">
+									<span class="bg-black/30 rounded-full p-3 hover:bg-black/50">
+										<svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewbox="0 0 24 24">
+											<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 18V8a1 1 0 0 1 1-1h1.5l1.707-1.707A1 1 0 0 1 8.914 5h6.172a1 1 0 0 1 .707.293L17.5 7H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/>
+											<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+										</svg>
+									</span>
+								</div>
+							{% endif %}	
+						</label>
 					</div>
+
+					<!-- Avatar -->
+					<div class="mx-auto flex justify-start -mt-20 mb-8">
+						<label for="avatarInput" class="relative w-32 h-32 cursor-pointer z-20">
+							<img id="avatarImg" src="{{ user.avatar ? asset('uploads/avatars/' ~ user.avatar) : 'https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg' }}" class="object-cover rounded-full bg-black p-4 shadow-lg cursor-pointer w-full h-full" alt="Avatar">
+							<span class="absolute bottom-9 right-9 bg-black/30 rounded-full p-3 hover:bg-black/50">
+								<svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewbox="0 0 24 24">
+									<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 18V8a1 1 0 0 1 1-1h1.5l1.707-1.707A1 1 0 0 1 8.914 5h6.172a1 1 0 0 1 .707.293L17.5 7H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/>
+									<path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+								</svg>
+							</span>
+						</label>
+						<input type="file" id="avatarInput" name="{{ form.avatar.vars.full_name }}" class="hidden" accept="image/*" onchange="previewAvatar(event)">
+					</div>
+					<button type="submit" class="absolute top-8 right-6 px-4 py-1 border border-blue-500 text-blue-400 rounded-full font-semibold cursor-pointer hover:bg-blue-500 hover:text-white transition">
+						Sauvegarder
+					</button>
+					<div>
+						{{ form_row(form.username) }}
+						{{ form_row(form.description) }}
+					</div>
+					{{ form_row(form._token) }}
 				</div>
-				{{ form_end(form) }}
+
+				{{ form_end(form, {'render_rest': false}) }}
 			</div>
 		</div>
 
 
-		<div class="h-32 bg-[#212327] w-full"></div>
+		<div class="h-32 w-full {% if not user.profilBanierre %}bg-[#212327]{% endif %}" {% if user.profilBanierre %} style="background-image: url('{{ asset('uploads/banners/' ~ user.profilBanierre) }}'); background-size: cover; background-position: center;" {% endif %}></div>
 		<div class="relative px-6">
 			<div class="absolute -top-12 left-4">
 				{% if user.avatar %}
-					<img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar" class="rounded-full w-20 h-20">
+					<img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar" class="rounded-full w-25 h-25 bg-black">
 				{% else %}
-					<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar par défaut" class="rounded-full w-20 h-20">
+					<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar par défaut" class="rounded-full w-25 h-25">
 				{% endif %}
 			</div>
 
@@ -147,44 +193,44 @@
 									{{ tweet.content }}
 								</div>
 								{% if tweet.media %}
-										<div class="mt-3">
-											<img src="{{ asset('uploads/media/' ~ tweet.media)}}" alt="Image du tweet" class="rounded-lg ">
-										</div>
-									{% endif %}
-								<div class="flex justify-between items-center gap-4 py-4">
-										<div class="group flex justify-center items-center gap-1 cursor-pointer transition duration-200">
-											<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
-											</svg>
-											<span class="text-gray-500 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]">
-												{{ tweet.commentaires|length }}
-											</span>
-										</div>
-										<div class="group flex justify-center items-center cursor-pointer transition duration-200">
-											<svg class="w-6 h-6 text-gray-500 group-hover:text-[#00ba7c] group-hover:drop-shadow-[0_0_6px_#00ba7c] transition duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
-											</svg>
-											<p class="text-gray-500 ml-1 transition group-hover:text-[#00ba7c] group-hover:drop-shadow-[0_0_6px_#00ba7c]">
-												0
-											</p>
-										</div>
-										<form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
-											<button type="submit" class="group flex cursor-pointer items-center text-gray-400 transition duration-200 hover:text-pink-300">
-												{% if tweet.isLikedBy(app.user) %}
-													<svg class="w-6 h-6 text-[#c81267] transition group-hover:drop-shadow-[0_0_6px_#c81267]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
-														<path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
-													</svg>
-												{% else %}
-													<svg class="w-6 h-6 text-gray-400 group-hover:text-[#c81267] group-hover:drop-shadow-[0_0_6px_#c81267] transition duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
-														<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-													</svg>
-												{% endif %}
-												<span class="transition {{ tweet.isLikedBy(app.user) ? 'text-[#c81267]' : 'group-hover:text-[#c81267]' }}">
-													{{ tweet.likes|length }}
-												</span>
-											</button>
-										</form>
+									<div class="mt-3">
+										<img src="{{ asset('uploads/media/' ~ tweet.media)}}" alt="Image du tweet" class="rounded-lg ">
 									</div>
+								{% endif %}
+								<div class="flex justify-between items-center gap-4 py-4">
+									<div class="group flex justify-center items-center gap-1 cursor-pointer transition duration-200">
+										<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
+											<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
+										</svg>
+										<span class="text-gray-500 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]">
+											{{ tweet.commentaires|length }}
+										</span>
+									</div>
+									<div class="group flex justify-center items-center cursor-pointer transition duration-200">
+										<svg class="w-6 h-6 text-gray-500 group-hover:text-[#00ba7c] group-hover:drop-shadow-[0_0_6px_#00ba7c] transition duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
+											<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
+										</svg>
+										<p class="text-gray-500 ml-1 transition group-hover:text-[#00ba7c] group-hover:drop-shadow-[0_0_6px_#00ba7c]">
+											0
+										</p>
+									</div>
+									<form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
+										<button type="submit" class="group flex cursor-pointer items-center text-gray-400 transition duration-200 hover:text-pink-300">
+											{% if tweet.isLikedBy(app.user) %}
+												<svg class="w-6 h-6 text-[#c81267] transition group-hover:drop-shadow-[0_0_6px_#c81267]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
+													<path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
+												</svg>
+											{% else %}
+												<svg class="w-6 h-6 text-gray-400 group-hover:text-[#c81267] group-hover:drop-shadow-[0_0_6px_#c81267] transition duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
+													<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+												</svg>
+											{% endif %}
+											<span class="transition {{ tweet.isLikedBy(app.user) ? 'text-[#c81267]' : 'group-hover:text-[#c81267]' }}">
+												{{ tweet.likes|length }}
+											</span>
+										</button>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -309,10 +355,10 @@
 								{{ tweet.content }}
 							</div>
 							{% if tweet.media %}
-										<div class="mt-3">
-											<img src="{{ asset('uploads/media/' ~ tweet.media)}}" alt="Image du tweet" class="rounded-lg ">
-										</div>
-									{% endif %}
+								<div class="mt-3">
+									<img src="{{ asset('uploads/media/' ~ tweet.media)}}" alt="Image du tweet" class="rounded-lg ">
+								</div>
+							{% endif %}
 							<div class="flex justify-between items-center gap-4 py-4">
 								<div class="group flex justify-center items-center gap-1 cursor-pointer transition duration-200">
 									<svg class="w-[24px] h-[24px] text-gray-400 transition group-hover:text-[#1988d3] group-hover:drop-shadow-[0_0_6px_#1988d3]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
