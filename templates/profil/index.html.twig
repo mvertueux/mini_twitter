@@ -76,7 +76,7 @@
 										</svg>
 									</span>
 								</div>
-							{% endif %}	
+							{% endif %}
 						</label>
 					</div>
 
@@ -94,8 +94,8 @@
 						<input type="file" id="avatarInput" name="{{ form.avatar.vars.full_name }}" class="hidden" accept="image/*" onchange="previewAvatar(event)">
 					</div>
 					<button type="submit" class="absolute top-8 right-6 px-4 py-1  text-[#000000] bg-[#eff3f4] rounded-full font-semibold cursor-pointer hover:bg-[#c2c2c2] transition">
-					Enregistrer
-				</button>
+						Enregistrer
+					</button>
 					<div>
 						{{ form_row(form.username) }}
 						{{ form_row(form.description) }}

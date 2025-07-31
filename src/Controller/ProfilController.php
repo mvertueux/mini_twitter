@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ProfilType;
+use App\Form\UserSearchType;
 use App\Repository\CommentaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,16 +96,38 @@ final class ProfilController extends AbstractController
             "form" => $form->createView(),
             'commentTweets' => $commentTweets,
         ]);
+    }
 
-        // // Commentaires par tweet par utilisateur
-        // $commentaires = $user->getComment();
-        // $commentTweets = $commentaireRepository->findByUserOrderedByIdDesc($user);
-        // return $this->render('profil/index.html.twig', [
-        //     "user" => $user,
-        //     $user = $this->getUser(),
-        //     "commentaires" => $commentaires,
-        //     'commentTweets' => $commentTweets,
-        //     "form" => $form->createView(),
-        // ]);
+    // Recherche d'un profil
+
+    #[Route('/profil/search', name: 'profil_user_search')]
+    public function searchByName(Request $request, UserRepository $userRepository)
+    {
+        $name = $request->get("searchProfil");
+        // dd($name) = utilisé pour tester : affiche le contenu de la variable et arrête le script (dump and die);
+
+        // Récupérer dans la bdd l'user dont le nom=$name
+        $user = $userRepository->findOneBy(['username' => $name]);
+
+        // puis rediriger sur la route profil_user avec l'id en paramètre
+
+        if ($user) {
+            return $this->redirectToRoute('profil_user', [
+                'id' => $user->getId(),
+            ]);
+        } else {
+            // return d'une redirection ou d'une vue erreur
+        }
+    }
+
+    #[Route('/profil/{id}', name: 'profil_user')]
+    public function show(User $user, TweetRepository $tweetRepository, LikeRepository $likeRepository): Response
+    {
+
+        return $this->render('profil/show.html.twig', [
+            'user' => $user,
+            'tweets' => $tweetRepository->findBy(['user' => $user]),
+            'likeTweets' => $likeRepository->findTweetsLikedByUser($user)
+        ]);
     }
 }
