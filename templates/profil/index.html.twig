@@ -172,7 +172,7 @@
 								<img src="https://as2.ftcdn.net/v2/jpg/03/59/58/91/1000_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-[#000]">
 							{% endif %}
 							<div class="flex-1">
-								<div class="flex justify-between items-center gap-2">
+								<div href="{{ path('profil_user', {"id": user.id}) }}" class="flex justify-between items-center gap-2">
 									<div class="text-sm">
 										<span class="font-bold">{{ app.user.username }}</span>
 										•
