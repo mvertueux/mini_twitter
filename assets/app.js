@@ -13,13 +13,13 @@ import './styles/app.css';
 window.showTab = function (tab, event) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(el => {
-    el.classList.remove('text-blue-400', 'border-b-2', 'border-blue-500', 'font-semibold');
+    el.classList.remove('text-white', 'border-b-2', 'border-blue-500', 'font-semibold');
     el.classList.add('text-gray-400');
   });
   const content = document.getElementById('tab-' + tab);
   if (content) content.classList.remove('hidden');
   if (event && event.target) {
-    event.target.classList.add('text-blue-400', 'border-b-2', 'border-blue-500', 'font-semibold');
+    event.target.classList.add('text-white', 'border-b-2', 'border-blue-500', 'font-semibold');
     event.target.classList.remove('text-gray-400');
   }
 };
@@ -87,39 +87,39 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const openBtn = document.getElementById('openTweetModalBtn');
-    const modal = document.getElementById('tweetModal');
-    const closeBtn = document.getElementById('closeModalBtn');
+document.addEventListener('DOMContentLoaded', function () {
+  const openBtn = document.getElementById('openTweetModalBtn');
+  const modal = document.getElementById('tweetModal');
+  const closeBtn = document.getElementById('closeModalBtn');
 
-    if (openBtn && modal) {
-        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+  }
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
     }
-    if (closeBtn && modal) {
-        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    }
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-        }
-    });
+  });
 });
 
 // MENU BURGER
 
-document.getElementById('openProfileMenu').addEventListener('click', function(e){
-    e.preventDefault();
-    document.getElementById('profile-menu').classList.remove('-translate-x-full');
-    document.getElementById('profile-menu-backdrop').classList.remove('hidden');
+document.getElementById('openProfileMenu').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('profile-menu').classList.remove('-translate-x-full');
+  document.getElementById('profile-menu-backdrop').classList.remove('hidden');
 });
-document.getElementById('closeProfileMenu').addEventListener('click', function(){
-    document.getElementById('profile-menu').classList.add('-translate-x-full');
-    document.getElementById('profile-menu-backdrop').classList.add('hidden');
+document.getElementById('closeProfileMenu').addEventListener('click', function () {
+  document.getElementById('profile-menu').classList.add('-translate-x-full');
+  document.getElementById('profile-menu-backdrop').classList.add('hidden');
 });
-document.getElementById('profile-menu-backdrop').addEventListener('click', function(){
-    document.getElementById('profile-menu').classList.add('-translate-x-full');
-    document.getElementById('profile-menu-backdrop').classList.add('hidden');
+document.getElementById('profile-menu-backdrop').addEventListener('click', function () {
+  document.getElementById('profile-menu').classList.add('-translate-x-full');
+  document.getElementById('profile-menu-backdrop').classList.add('hidden');
 });
 
 // AVATARS

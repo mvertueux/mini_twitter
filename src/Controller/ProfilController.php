@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\UserRepository;
 use App\Repository\LikeRepository;
 use App\Repository\TweetRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
