@@ -74,7 +74,7 @@
 												</span>
 											</div>
 											<form action="{{ path('app_tweet_retweet', {'id': tweet.id}) }}" method="post" style="display:inline;">
-												<button type="submit" class="cursor-pointer group inline-flex items-center text-[#71767b] transition duration-200">
+												<button onclick="event.stopPropagation();"  type="submit" class="cursor-pointer group inline-flex items-center text-[#71767b] transition duration-200">
 													<span title="Repost" class="inline-flex items-center justify-center p-2 rounded-full transition group-hover:bg-[#00ba7c]/15">
 														<svg class="w-5 h-5 text-[#71767b] transition group-hover:text-[#00ba7c]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
 															<path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55V16c0 1.1.896 2 2 2H13v2H7.5c-2.209 0-4-1.79-4-4V7.55L1.432 9.48.068 8.02 4.5 3.88zM16.5 6H11V4h5.5c2.209 0 4 1.79 4 4v8.45l2.068-1.93 1.364 1.46-4.432 4.14-4.432-4.14 1.364-1.46 2.068 1.93V8c0-1.1-.896-2-2-2z"/>
@@ -86,7 +86,7 @@
 												</button>
 											</form>
 											<form action="{{ path('app_tweet_like', {'id': tweet.id}) }}" method="post" style="display:inline;">
-												<button type="submit" class=" cursor-pointer group inline-flex items-center text-[#71767b] transition duration-200">
+												<button onclick="event.stopPropagation();"  type="submit" class=" cursor-pointer group inline-flex items-center text-[#71767b] transition duration-200">
 													<span title="Aimer" class="inline-flex items-center justify-center p-2 rounded-full transition group-hover:bg-[#f91880]/10">
 														{% if tweet.isLikedBy(app.user) %}
 															<svg class="w-5 h-5 text-[#f91880] " xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
