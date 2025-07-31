@@ -129,16 +129,28 @@ final class ProfilController extends AbstractController
     public function show(
         User $user,
         TweetRepository $tweetRepository,
-        LikeRepository $likeRepository
+        LikeRepository $likeRepository,
+        CommentaireRepository $commentaireRepository,
+        RetweetRepository $retweetRepository
     ): Response {
         if ($this->getUser() && $this->getUser() === $user) {
             return $this->redirectToRoute('app_profil');
         }
 
+        $tweets        = $tweetRepository->findBy(['user' => $user], ['dateTweet' => 'DESC']);
+        $likeTweets    = $likeRepository->findTweetsLikedByUser($user);
+        $commentTweets = $commentaireRepository->findBy(['user' => $user], ['dateComment' => 'DESC']);
+        $retweetTweets = $retweetRepository->findTweetsRetweetByUser($user);
+
         return $this->render('profil/show.html.twig', [
             'user' => $user,
             'tweets' => $tweetRepository->findBy(['user' => $user]),
-            'likeTweets' => $likeRepository->findTweetsLikedByUser($user)
+            'likeTweets' => $likeRepository->findTweetsLikedByUser($user),
+            'commentTweets'  => $commentTweets,
+            'retweetTweets'  => $retweetTweets,
+            'tweets'         => $tweets,
+            'likeTweets'     => $likeTweets
+
         ]);
     }
 }
