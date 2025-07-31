@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ProfilType;
 use App\Entity\User;
 use App\Form\UserSearchType;
