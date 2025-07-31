@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tweet;
 use App\Entity\Like;
 use App\Entity\Commentaire;
+use App\Entity\Retweet;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -109,6 +110,35 @@ final class TweetController extends AbstractController
             $like->setUser($user);
 
             $entityManager->persist($like);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectBack($request);
+    }
+
+    // RETWEET UN TWEET
+
+    #[Route('/{id}/retweet', name: 'app_tweet_retweet', methods: ['POST'])]
+    public function retweet(Tweet $tweet, EntityManagerInterface $entityManager, Request $request,): Response
+    {
+        $user = $this->getUser();
+
+        $existingRetweet = $entityManager->getRepository(Retweet::class)->findOneBy([
+            'tweet' => $tweet,
+            'user' => $user,
+        ]);
+
+        if ($existingRetweet) {
+
+            $entityManager->remove($existingRetweet);
+        } else {
+
+            $retweet = new Retweet();
+            $retweet->setTweet($tweet);
+            $retweet->setUser($user);
+
+            $entityManager->persist($retweet);
         }
 
         $entityManager->flush();

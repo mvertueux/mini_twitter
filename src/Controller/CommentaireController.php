@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tweet;
 use App\Entity\Like;
 use App\Entity\Commentaire;
+use App\Entity\Retweet;
 use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
 use App\Repository\TweetRepository;
@@ -29,39 +30,39 @@ final class CommentaireController extends AbstractController
         return $this->redirectToRoute('app_tweet_index');
     }
 
-    // NOUVEAU COMMENTAIRE
+    // // NOUVEAU COMMENTAIRE
 
-    #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    // #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
+    // public function new(TweetRepository $tweetRepository, Request $request, EntityManagerInterface $entityManager): Response
+    // {
 
-        $tweet = $tweetRepository->find($id);
-        if (!$tweet) {
-            throw $this->createNotFoundException('Tweet introuvable.');
-        }
 
-        $commentaire = new Commentaire();
+    //     if (!$tweet) {
+    //         throw $this->createNotFoundException('Tweet introuvable.');
+    //     }
 
-        $form = $this->createForm(CommentaireType::class, $commentaire);
-        $form->handleRequest($request);
+    //     $commentaire = new Commentaire();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+    //     $form = $this->createForm(CommentaireType::class, $commentaire);
+    //     $form->handleRequest($request);
 
-            $commentaire->setUser($this->getUser());
+    //     if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager->persist($commentaire);
-            $entityManager->flush();
+    //         $commentaire->setUser($this->getUser());
 
-            return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //         $entityManager->persist($commentaire);
+    //         $entityManager->flush();
 
-        return $this->render('commentaire/new.html.twig', [
-            'commentaire' => $commentaire,
-            'form' => $form,
-            'tweet' => $tweet,
+    //         return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-        ]);
-    }
+    //     return $this->render('commentaire/new.html.twig', [
+    //         'commentaire' => $commentaire,
+    //         'form' => $form,
+    //         'tweet' => $tweet,
+
+    //     ]);
+    // }
 
     // AFFICHER UN COMMENTAIRE
 
@@ -130,6 +131,35 @@ final class CommentaireController extends AbstractController
             $like->setUser($user);
 
             $entityManager->persist($like);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectBack($request);
+    }
+
+    // RETWEET UN COMMENTAIRE
+
+    #[Route('/{id}/retweet', name: 'app_commentaire_retweet', methods: ['POST'])]
+    public function retweet(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $existingRetweet = $entityManager->getRepository(Retweet::class)->findOneBy([
+            'commentaire' => $commentaire,
+            'user' => $user,
+        ]);
+
+        if ($existingRetweet) {
+
+            $entityManager->remove($existingRetweet);
+        } else {
+
+            $retweet = new Retweet();
+            $retweet->setCommentaire($commentaire);
+            $retweet->setUser($user);
+
+            $entityManager->persist($retweet);
         }
 
         $entityManager->flush();

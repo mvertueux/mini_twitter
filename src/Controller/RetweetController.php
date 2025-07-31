@@ -19,9 +19,7 @@ final class RetweetController extends AbstractController
     #[Route(name: 'app_retweet_index', methods: ['GET'])]
     public function index(RetweetRepository $retweetRepository): Response
     {
-        return $this->render('retweet/index.html.twig', [
-            'retweets' => $retweetRepository->findAll()
-        ]);
+        return $this->redirectToRoute('app_tweet_index');
     }
 
     #[Route('/new', name: 'app_retweet_new', methods: ['GET', 'POST'])]

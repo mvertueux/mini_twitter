@@ -36,9 +36,16 @@ class Commentaire
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'commentaire', orphanRemoval: true, cascade: ['remove'])]
     private Collection $likes;
 
+    /**
+     * @var Collection<int, Retweet>
+     */
+    #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'commentaire')]
+    private Collection $retweets;
+
     public function __construct()
     {
         $this->likes = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -140,5 +147,35 @@ class Commentaire
             }
         }
         return false;
+    }
+
+    /**
+     * @return Collection<int, Retweet>
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): static
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets->add($retweet);
+            $retweet->setCommentaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRetweet(Retweet $retweet): static
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getCommentaire() === $this) {
+                $retweet->setCommentaire(null);
+            }
+        }
+
+        return $this;
     }
 }
