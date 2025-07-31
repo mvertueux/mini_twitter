@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\LikeRepository;
 use App\Repository\TweetRepository;
@@ -122,8 +123,14 @@ final class ProfilController extends AbstractController
     }
 
     #[Route('/profil/{id}', name: 'profil_user')]
-    public function show(User $user, TweetRepository $tweetRepository, LikeRepository $likeRepository): Response
-    {
+    public function show(
+        User $user,
+        TweetRepository $tweetRepository,
+        LikeRepository $likeRepository
+    ): Response {
+        if ($this->getUser() && $this->getUser() === $user) {
+            return $this->redirectToRoute('app_profil');
+        }
 
         return $this->render('profil/show.html.twig', [
             'user' => $user,
