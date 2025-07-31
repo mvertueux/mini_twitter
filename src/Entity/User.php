@@ -77,12 +77,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $dateInscription = null;
 
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
+    #[ORM\JoinTable(
+        name: 'user_follows',
+        joinColumns: [new ORM\JoinColumn(name: 'follower_id', referencedColumnName: 'id')],
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'followed_id', referencedColumnName: 'id')]
+    )]
+    private Collection $followings;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'followings')]
+    private Collection $followers;
+
     public function __construct()
     {
         $this->tweets = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->retweets = new ArrayCollection();
+        $this->followings = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -312,13 +325,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getAvatar(): ?string
     {
-    return $this->avatar;
+        return $this->avatar;
     }
 
     public function setAvatar(?string $avatar): self
     {
-    $this->avatar = $avatar;
-    return $this;
+        $this->avatar = $avatar;
+        return $this;
     }
 
     public function getProfilBanierre(): ?string
@@ -351,5 +364,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->dateInscription === null) {
             $this->dateInscription = new \DateTime();
         }
+    }
+
+    public function getFollowings(): Collection
+    {
+        return $this->followings;
+    }
+
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function follow(self $user): self
+    {
+        if ($user === $this) {
+            return $this;
+        }
+        if (!$this->followings->contains($user)) {
+            $this->followings->add($user);
+            $user->followers->add($this);
+        }
+        return $this;
+    }
+
+    public function unfollow(self $user): self
+    {
+        if ($user === $this) {
+            return $this;
+        }
+        if ($this->followings->contains($user)) {
+            $this->followings->removeElement($user);
+            $user->followers->removeElement($this);
+        }
+        return $this;
+    }
+
+    public function isFollowing(User $user): bool
+    {
+        return $this->followings->contains($user);
+    }
+
+    public function isFollowedBy(self $user): bool
+    {
+        return $this->followers->contains($user);
     }
 }
