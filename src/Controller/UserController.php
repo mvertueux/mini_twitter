@@ -14,20 +14,26 @@ final class UserController extends AbstractController
     #[Route('/user', name: 'app_user')]
     public function list(Request $request, UserRepository $userRepository)
     {
-        $form = $this->createForm(UserSearchType::class);
-        $form->handleRequest($request);
+        $formUser = $this->createForm(UserSearchType::class);
+        $formUser->handleRequest($request);
 
         $users = [];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $query = $form->get('search')->getData();
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
+            $query = $formUser->get('search')->getData();
             $users = $userRepository->searchByName($query);
+            // Si un seul résultat : rediriger vers le profil
+            if (count($users) === 1) {
+                return $this->redirectToRoute('profil_index', [
+                    'id' => $users[0]->getId(),
+                ]);
+            }
         } else {
             $users = $userRepository->findAll();
         }
 
         return $this->render('user/list.html.twig', [
-            'form' => $form->createView(),
+            'form' => $formUser->createView(),
             'users' => $users,
         ]);
     }
