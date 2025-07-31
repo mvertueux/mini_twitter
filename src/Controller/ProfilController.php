@@ -117,7 +117,7 @@ final class ProfilController extends AbstractController
                 'id' => $user->getId(),
             ]);
         } else {
-            return $this->redirectToRoute();
+            return $this->redirectToRoute('error_page');
         }
     }
 
