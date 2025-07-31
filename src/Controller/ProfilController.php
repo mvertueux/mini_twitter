@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\LikeRepository;
+use App\Repository\RetweetRepository;
 use App\Repository\TweetRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -37,7 +38,7 @@ final class ProfilController extends AbstractController
 
     #[Route('/profil', name: 'app_profil')]
     #[IsGranted('ROLE_USER')]
-    public function index(TweetRepository $tweetRepository, CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
+    public function index(RetweetRepository $retweetRepository, TweetRepository $tweetRepository, CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -91,12 +92,14 @@ final class ProfilController extends AbstractController
         $tweets = $tweetRepository->findByUserOrderedByIdDesc($user);
         $likeTweets = $likeRepository->findTweetsLikedByUser($user);
         $commentTweets = $commentaireRepository->findByUserOrderedByIdDesc($user);
+        $retweetTweets = $retweetRepository->findTweetsRetweetByUser($user);
         return $this->render('profil/index.html.twig', [
             "user" => $user,
             "tweets" => $tweets,
             'likeTweets' => $likeTweets,
             "form" => $form->createView(),
             'commentTweets' => $commentTweets,
+            'retweetTweets' => $retweetTweets,
         ]);
     }
 
