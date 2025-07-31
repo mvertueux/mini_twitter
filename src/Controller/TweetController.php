@@ -10,7 +10,6 @@ use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,11 +31,15 @@ final class TweetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $tweet->setUser($this->getUser());
 
-            $image = $form->get('imageFile')->getData();
+            $mediaFile = $form->get('imageFile')->getData();
 
-            if ($image) {
-                $newFilename = uniqid() . '.' . $image->guessExtension();
-                $image->move($this->getParameter('kernel.project_dir') . '/public/uploads/media', $newFilename);
+            if ($mediaFile) {
+                $newFilename = uniqid() . '.' . ($mediaFile->guessExtension()
+                    ?: strtolower(pathinfo($mediaFile->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'bin')
+
+                );
+
+                $mediaFile->move($this->getParameter('kernel.project_dir') . '/public/uploads/media', $newFilename);
                 $tweet->setMedia($newFilename);
             }
 
@@ -83,21 +86,6 @@ final class TweetController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
-
-
-    // // AFFICHE LES COMMENTAIRES D'UN TWEET PAR UTILISATEUR
-    // $commentairesParUtilisateur = [];
-
-    // foreach ($tweet->getCommentaires() as $commentaire) {
-    //     $username = $commentaire->getUser()->getUsername();
-    //     $commentairesParUtilisateur[$username][] = $commentaire;
-    // }
-
-    // return $this->render('tweet/show.html.twig', [
-    //     'tweet' => $tweet,
-    //     'commentaires_groupes' => $commentairesParUtilisateur,
-    // ]);
-
 
     // LIKE UN TWEET
 
@@ -167,7 +155,7 @@ final class TweetController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectBack($request);
+        return $this->redirectToRoute('app_tweet_index');
     }
 
     public function redirectBack(Request $request, string $fallbackRoute = 'app_tweet_index'): RedirectResponse
