@@ -37,7 +37,11 @@
 		</div>
 
 
-		<div class="h-32 bg-[#212327] w-full"></div>
+		<div class="h-32 w-full {% if not user.profilBanierre %}bg-[#212327]{% endif %}" {% if user.profilBanierre %} style="
+			            background-image: url('{{ asset('uploads/banners/' ~ user.profilBanierre) }}');
+			            background-size: cover;
+			            background-position: center;
+			        " {% endif %}></div>
 		<div class="relative px-6">
 			<div class="absolute -top-12 left-4">
 				{% if user.avatar %}
