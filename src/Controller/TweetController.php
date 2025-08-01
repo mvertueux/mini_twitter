@@ -152,8 +152,10 @@ final class TweetController extends AbstractController
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
     public function show(Tweet $tweet): Response
     {
+        $author = $tweet->getUser();
         return $this->render('tweet/show.html.twig', [
             'tweet' => $tweet,
+            'user' => $author,
         ]);
     }
 
