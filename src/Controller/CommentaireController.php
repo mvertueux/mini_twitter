@@ -32,7 +32,7 @@ final class CommentaireController extends AbstractController
 
     // AFFICHER UN COMMENTAIRE
 
-    #[Route('/{id}', name: 'app_commentaire_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_commentaire_show', methods: ['GET', 'POST'])]
     public function show(int $id, CommentaireRepository $commentaireRepository): Response
     {
         $commentaire = $commentaireRepository->find($id);

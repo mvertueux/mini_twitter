@@ -157,13 +157,15 @@ final class TweetController extends AbstractController
 
     // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
-    public function show(int $id, TweetRepository $tweetRepository, Tweet $tweet, EntityManagerInterface $em): Response
+    public function show(int $id, TweetRepository $tweetRepository, EntityManagerInterface $em): Response
     {
         $tweet = $tweetRepository->find($id);
 
         if (!$tweet) {
             // Redirection personnalisée vers une page d'erreur
-            return $this->redirectToRoute('error_page');
+            return $this->render('error/errorPage.html.twig', [
+                'id' => $id,
+            ], new Response('', 404));
         }
 
         $tweet->incrementViews();
@@ -208,6 +210,7 @@ final class TweetController extends AbstractController
 
         return $this->redirectToRoute('app_tweet_index');
     }
+
 
     public function redirectBack(Request $request, string $fallbackRoute = 'app_tweet_index'): RedirectResponse
     {
