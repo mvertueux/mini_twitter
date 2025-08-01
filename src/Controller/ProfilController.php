@@ -16,6 +16,7 @@ use App\Repository\LikeRepository;
 use App\Repository\RetweetRepository;
 use App\Repository\TweetRepository;
 use App\Repository\UserRepository;
+use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -42,6 +43,12 @@ final class ProfilController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(RetweetRepository $retweetRepository, TweetRepository $tweetRepository, CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('error_page');
+        };
+
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -113,7 +120,7 @@ final class ProfilController extends AbstractController
         $name = $request->get("searchProfil");
         // dd($name) = utilisé pour tester : affiche le contenu de la variable et arrête le script (dump and die);
 
-        // Récupérer dans la bdd l'user dont le nom=$name
+        // Récupérer dans la bdd le user dont le nom=$name
         $user = $userRepository->findOneBy(['username' => $name]);
 
         // puis rediriger sur la route profil_user avec l'id en paramètre
@@ -123,18 +130,26 @@ final class ProfilController extends AbstractController
                 'id' => $user->getId(),
             ]);
         } else {
-            return $this->redirectToRoute('error_page');
+            return $this->redirectToRoute('error_profil');
         }
     }
 
     #[Route('/profil/{id}', name: 'profil_user')]
     public function show(
-        User $user,
+        int $id,
         TweetRepository $tweetRepository,
         LikeRepository $likeRepository,
         CommentaireRepository $commentaireRepository,
-        RetweetRepository $retweetRepository
+        RetweetRepository $retweetRepository,
+        UserRepository $userRepository
     ): Response {
+
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            return $this->redirectToRoute('error_page');
+        };
+
         if ($this->getUser() && $this->getUser() === $user) {
             return $this->redirectToRoute('app_profil');
         }

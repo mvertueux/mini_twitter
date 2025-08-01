@@ -8,6 +8,7 @@ use App\Entity\Commentaire;
 use App\Entity\Retweet;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -80,9 +81,14 @@ final class TweetController extends AbstractController
 
     // AFFICHE LES COMMENTAIRES D'UN TWEET
     #[Route('/{id}/commentaires', name: 'app_commentaire_show', methods: ['GET'])]
-    public function showComment(Tweet $tweet): Response
+    public function showComment(Tweet $tweet, int $id, TweetRepository $tweetRepository): Response
     {
         $commentaires = $tweet->getCommentaires();
+        $commentTweet = $tweetRepository->find($id);
+
+        if (!$commentTweet) {
+            return $this->redirectToRoute('error_page');
+        }
 
         return $this->render('commentaire/show.html.twig', [
             'tweet' => $tweet,
@@ -95,6 +101,7 @@ final class TweetController extends AbstractController
     #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
     public function like(Tweet $tweet, EntityManagerInterface $entityManager, Request $request,): Response
     {
+
         $user = $this->getUser();
 
         $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
@@ -150,8 +157,17 @@ final class TweetController extends AbstractController
 
     // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
-    public function show(Tweet $tweet, EntityManagerInterface $em): Response
+    public function show(int $id, TweetRepository $tweetRepository, EntityManagerInterface $em): Response
     {
+        $tweet = $tweetRepository->find($id);
+
+        if (!$tweet) {
+            // Redirection personnalisée vers une page d'erreur
+            return $this->render('error/errorPage.html.twig', [
+                'id' => $id,
+            ], new Response('', 404));
+        }
+
         $tweet->incrementViews();
         $author = $tweet->getUser();
         $em->flush();
@@ -194,6 +210,7 @@ final class TweetController extends AbstractController
 
         return $this->redirectToRoute('app_tweet_index');
     }
+
 
     public function redirectBack(Request $request, string $fallbackRoute = 'app_tweet_index'): RedirectResponse
     {

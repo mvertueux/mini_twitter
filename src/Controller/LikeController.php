@@ -44,8 +44,15 @@ final class LikeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_like_show', methods: ['GET'])]
-    public function show(Like $like): Response
+    public function show(int $id, LikeRepository $likeRepository): Response
     {
+
+        $like = $likeRepository->find($id);
+
+        if (!$like) {
+            return $this->redirectToRoute('error_page');
+        }
+
         return $this->render('like/show.html.twig', [
             'like' => $like,
         ]);

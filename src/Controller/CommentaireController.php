@@ -30,45 +30,17 @@ final class CommentaireController extends AbstractController
         return $this->redirectToRoute('app_tweet_index');
     }
 
-    // // NOUVEAU COMMENTAIRE
-
-    // #[Route('/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
-    // public function new(TweetRepository $tweetRepository, Request $request, EntityManagerInterface $entityManager): Response
-    // {
-
-
-    //     if (!$tweet) {
-    //         throw $this->createNotFoundException('Tweet introuvable.');
-    //     }
-
-    //     $commentaire = new Commentaire();
-
-    //     $form = $this->createForm(CommentaireType::class, $commentaire);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-
-    //         $commentaire->setUser($this->getUser());
-
-    //         $entityManager->persist($commentaire);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('commentaire/new.html.twig', [
-    //         'commentaire' => $commentaire,
-    //         'form' => $form,
-    //         'tweet' => $tweet,
-
-    //     ]);
-    // }
-
     // AFFICHER UN COMMENTAIRE
 
-    #[Route('/{id}', name: 'app_commentaire_show', methods: ['GET'])]
-    public function show(Commentaire $commentaire): Response
+    #[Route('/{id}', name: 'app_commentaire_show', methods: ['GET', 'POST'])]
+    public function show(int $id, CommentaireRepository $commentaireRepository): Response
     {
+        $commentaire = $commentaireRepository->find($id);
+
+        if (!$commentaire) {
+            return $this->redirectToRoute('error_page');
+        }
+
         return $this->render('commentaire/show.html.twig', [
             'commentaire' => $commentaire,
         ]);
