@@ -27,6 +27,7 @@ final class TweetController extends AbstractController
     public function index(Request $request, TweetRepository $tweetRepository, EntityManagerInterface $entityManager): Response
     {
         $tweet = new Tweet();
+        $onglet = $request->query->get('onglet', 'for_you');
         $form = $this->createForm(TweetType::class, $tweet);
         $form->handleRequest($request);
 
@@ -53,6 +54,7 @@ final class TweetController extends AbstractController
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAllOrderedByIdDesc(),
             'form' => $form->createView(),
+            'onglet' => $onglet,
         ]);
     }
 
@@ -155,7 +157,7 @@ final class TweetController extends AbstractController
 
     // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
-    public function show(int $id, TweetRepository $tweetRepository): Response
+    public function show(int $id, TweetRepository $tweetRepository, Tweet $tweet, EntityManagerInterface $em): Response
     {
         $tweet = $tweetRepository->find($id);
 
@@ -164,8 +166,13 @@ final class TweetController extends AbstractController
             return $this->redirectToRoute('error_page');
         }
 
+        $tweet->incrementViews();
+        $author = $tweet->getUser();
+        $em->flush();
+
         return $this->render('tweet/show.html.twig', [
             'tweet' => $tweet,
+            'user' => $author,
         ]);
     }
 

@@ -15,6 +15,7 @@ class FollowController extends AbstractController
     public function follow(User $user, EntityManagerInterface $em, Request $request): Response
     {
         $currentUser = $this->getUser();
+        /** @var User $currentUser */
 
         if (!$currentUser) {
             throw $this->createAccessDeniedException("Vous devez être connecté pour suivre quelqu'un.");
@@ -36,6 +37,7 @@ class FollowController extends AbstractController
     public function unfollow(User $user, EntityManagerInterface $em, Request $request): Response
     {
         $currentUser = $this->getUser();
+        /** @var User $currentUser */
 
         if (!$currentUser) {
             throw $this->createAccessDeniedException("Vous devez être connecté pour vous désabonner.");

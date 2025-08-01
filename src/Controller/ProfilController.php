@@ -168,4 +168,22 @@ final class ProfilController extends AbstractController
 
         ]);
     }
+    
+    #[Route('/profil/{id}/following', name: 'profil_user_followings')]
+    public function followings(User $user): Response
+    {
+        return $this->render('profil/followings.html.twig', [
+            'user' => $user,
+            'people' => $user->getFollowings(),
+        ]);
+    }
+
+    #[Route('/profil/{id}/followers', name: 'profil_user_followers')]
+    public function followers(User $user): Response
+    {
+        return $this->render('profil/followers.html.twig', [
+            'user' => $user,
+            'people' => $user->getFollowers(),
+        ]);
+    }
 }
