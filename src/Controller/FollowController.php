@@ -8,13 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/')]
+#[IsGranted('ROLE_USER')]
 class FollowController extends AbstractController
 {
     #[Route('/user/{id}/follow', name: 'user_follow', methods: ['POST'])]
     public function follow(User $user, EntityManagerInterface $em, Request $request): Response
     {
         $currentUser = $this->getUser();
+        /** @var User $currentUser */
 
         if (!$currentUser) {
             throw $this->createAccessDeniedException("Vous devez être connecté pour suivre quelqu'un.");
@@ -36,6 +40,7 @@ class FollowController extends AbstractController
     public function unfollow(User $user, EntityManagerInterface $em, Request $request): Response
     {
         $currentUser = $this->getUser();
+        /** @var User $currentUser */
 
         if (!$currentUser) {
             throw $this->createAccessDeniedException("Vous devez être connecté pour vous désabonner.");

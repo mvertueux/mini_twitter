@@ -25,6 +25,7 @@ class Like
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\OrderBy(['dateLiker' => 'DESC'])]
     private ?Tweet $tweet = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,12 +19,24 @@ class Commentaire
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(
+        message: "Vous ne pouvez pas publiez un commentaire vide.",
+        normalizer: 'trim'
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Le commentaire doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le commentaire ne peut pas dépasser {{ limit }} caractères.",
+        normalizer: 'trim'
+    )]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $dateComment = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
