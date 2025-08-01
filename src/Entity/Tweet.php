@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use App\Form\CommentaireType;
 use App\Repository\TweetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use PHPUnit\TextUI\Configuration\File;
+use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TweetRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -19,6 +22,17 @@ class Tweet
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(
+        message: "Vous ne pouvez pas publier un message vide.",
+        normalizer: 'trim'
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Le message doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le message ne peut pas dépasser {{ limit }} caractères.",
+        normalizer: 'trim'
+    )]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -38,6 +52,7 @@ class Tweet
      * @var Collection<int, Commentaire>
      */
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'tweet')]
+    #[ORM\OrderBy(['dateComment' => 'DESC'])]
     private Collection $commentaires;
 
     /**
