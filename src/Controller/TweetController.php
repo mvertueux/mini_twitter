@@ -150,9 +150,12 @@ final class TweetController extends AbstractController
 
     // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
-    public function show(Tweet $tweet): Response
+    public function show(Tweet $tweet, EntityManagerInterface $em): Response
     {
+        $tweet->incrementViews();
         $author = $tweet->getUser();
+        $em->flush();
+
         return $this->render('tweet/show.html.twig', [
             'tweet' => $tweet,
             'user' => $author,
