@@ -78,9 +78,14 @@ final class TweetController extends AbstractController
 
     // AFFICHE LES COMMENTAIRES D'UN TWEET
     #[Route('/{id}/commentaires', name: 'app_commentaire_show', methods: ['GET'])]
-    public function showComment(Tweet $tweet): Response
+    public function showComment(Tweet $tweet, int $id, TweetRepository $tweetRepository): Response
     {
         $commentaires = $tweet->getCommentaires();
+        $commentTweet = $tweetRepository->find($id);
+
+        if (!$commentTweet) {
+            return $this->redirectToRoute('error_page');
+        }
 
         return $this->render('commentaire/show.html.twig', [
             'tweet' => $tweet,
@@ -148,8 +153,15 @@ final class TweetController extends AbstractController
 
     // AFFICHER DETAIL D'UN TWEET
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
-    public function show(Tweet $tweet): Response
+    public function show(int $id, TweetRepository $tweetRepository): Response
     {
+        $tweet = $tweetRepository->find($id);
+
+        if (!$tweet) {
+            // Redirection personnalisée vers une page d'erreur
+            return $this->redirectToRoute('error_page');
+        }
+
         return $this->render('tweet/show.html.twig', [
             'tweet' => $tweet,
         ]);
