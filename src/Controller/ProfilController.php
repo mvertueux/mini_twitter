@@ -20,6 +20,8 @@ use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/')]
+#[IsGranted('ROLE_USER')]
 final class ProfilController extends AbstractController
 {
     #[Route('/user/{id}/delete-banniere', name: 'user_delete_banniere', methods: ['POST'])]

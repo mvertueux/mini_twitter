@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà associé à un compte.')]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -22,7 +23,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: "L'email est obligatoire.")]
+    #[Assert\Email(message: "L'email '{{ value }}' n'est pas valide.")]
     private ?string $email = null;
 
     /**
@@ -62,6 +65,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $retweets;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur est obligatoire.")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Le nom d'utilisateur doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le nom d'utilisateur ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
