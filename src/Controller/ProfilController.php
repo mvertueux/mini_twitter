@@ -41,6 +41,12 @@ final class ProfilController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(RetweetRepository $retweetRepository, TweetRepository $tweetRepository, CommentaireRepository $commentaireRepository, LikeRepository $likeRepository, Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('error_page');
+        };
+
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 

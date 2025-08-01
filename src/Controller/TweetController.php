@@ -8,6 +8,7 @@ use App\Entity\Commentaire;
 use App\Entity\Retweet;
 use App\Form\TweetType;
 use App\Repository\TweetRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -98,6 +99,7 @@ final class TweetController extends AbstractController
     #[Route('/{id}/like', name: 'app_tweet_like', methods: ['POST'])]
     public function like(Tweet $tweet, EntityManagerInterface $entityManager, Request $request,): Response
     {
+
         $user = $this->getUser();
 
         $existingLike = $entityManager->getRepository(Like::class)->findOneBy([

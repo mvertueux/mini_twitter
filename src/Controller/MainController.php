@@ -23,8 +23,8 @@ final class MainController extends AbstractController
         ]);
     }
 
-    #[Route('/error', name: 'error_profil')]
-    public function error(): Response
+    #[Route('/errorProfil', name: 'error_profil')]
+    public function errorProfil(): Response
     {
         return $this->render('error/errorProfil.html.twig');
     }
@@ -33,5 +33,11 @@ final class MainController extends AbstractController
     public function errorPage(): Response
     {
         return $this->render('error/errorPage.html.twig');
+    }
+
+    #[Route('/error', name: 'error')]
+    public function error(): Response
+    {
+        return $this->render('error/error.html.twig');
     }
 }
