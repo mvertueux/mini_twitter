@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-<div>
+
 	<div class="mt-3 -mb-3 px-4 flex flex-row items-center gap-0">
 		{% if app.user and app.user.avatar %}
 			<img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="Avatar" class="w-11 h-11 rounded-full object-cover">
@@ -10,8 +10,9 @@
 		<div class="flex-1">
 			{{ form_widget(form.content, {
             'attr': {
-                'class': 'w-full p-3 text-lg border-b border-[#2f3336] text-white focus:outline-none focus:ring-2 focus:ring-main-color resize-none min-h-[80px]',
-                'placeholder': 'Quoi de neuf ?'
+                'class': " text-white w-full min-h-[80px] focus:outline-none focus:ring-2 focus:ring-main-color resize-none p-3",
+                'placeholder': 'Postez votre réponse',
+				'rows' : '2',
             }
         }) }}
 			<div class="flex group justify-between items-center mt-2">
@@ -26,5 +27,5 @@
 			{% endif %}
 		</div>
 	</div>
-</div>
+
 {{ form_end(form) }}
