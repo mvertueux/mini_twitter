@@ -38,11 +38,15 @@
 			{{ app.user ? app.user.email : "" }}
 		</p>
 		{% if app.user %}
-			<div class="mt-2 text-sm">
-				<span class="font-bold text-white">{{ app.user.followings|length }}{{ app.user.followings|length > 1 ? 's' }}</span>
-				<span class="text-gray-400 mr-2">Following</span>
-				<span class="font-bold text-white">{{ app.user.followers|length }}{{ app.user.followers|length > 1 ? 's' }}</span>
-				<span class="text-gray-400">Followers</span>
+			<div class="mt-2 text-sm flex gap-4">
+				<a href="{{ path('profil_user_followings', {'id': app.user.id}) }}" class="hover:underline flex items-center group">
+					<span class="font-bold text-white group-hover:underline">{{ app.user.followings|length }} </span>
+					<span class="text-gray-400 ml-1 group-hover:underline"> Following</span>
+				</a>
+				<a href="{{ path('profil_user_followers', {'id': app.user.id}) }}" class="hover:underline flex items-center group">
+					<span class="font-bold text-white group-hover:underline">{{ app.user.followers|length }} </span>
+					<span class="text-gray-400 ml-1 group-hover:underline"> Followers</span>
+				</a>
 			</div>
 		{% endif %}
 		<ul class="space-y-1 font-medium text-lg">

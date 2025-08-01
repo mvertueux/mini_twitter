@@ -10,6 +10,40 @@ Turbo.session.drive = false;
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
+document.addEventListener('DOMContentLoaded', function() {
+    const tabForYou = document.getElementById('btn-for-you');
+    const tabFollowing = document.getElementById('btn-following');
+    const tabContents = {
+        'for-you': document.getElementById('tweets-for-you'),
+        'following': document.getElementById('tweets-following')
+    };
+
+    function switchTab(tab) {
+        if(tab === 'for-you') {
+            tabContents['for-you'].classList.remove('hidden');
+            tabContents['for-you'].classList.add('block');
+            tabContents['following'].classList.remove('block');
+            tabContents['following'].classList.add('hidden');
+            tabForYou.classList.add('text-white', 'font-bold', 'border-blue-500');
+            tabForYou.classList.remove('text-[#888]', 'border-transparent');
+            tabFollowing.classList.remove('text-white', 'font-bold', 'border-blue-500');
+            tabFollowing.classList.add('text-[#888]', 'border-transparent');
+        } else {
+            tabContents['for-you'].classList.remove('block');
+            tabContents['for-you'].classList.add('hidden');
+            tabContents['following'].classList.remove('hidden');
+            tabContents['following'].classList.add('block');
+            tabFollowing.classList.add('text-white', 'font-bold', 'border-blue-500');
+            tabFollowing.classList.remove('text-[#888]', 'border-transparent');
+            tabForYou.classList.remove('text-white', 'font-bold', 'border-blue-500');
+            tabForYou.classList.add('text-[#888]', 'border-transparent');
+        }
+    }
+    tabForYou.addEventListener('click', () => switchTab('for-you'));
+    tabFollowing.addEventListener('click', () => switchTab('following'));
+    switchTab('for-you'); // mettre "For you" par défaut
+});
+
 window.showTab = function (tab, event) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(el => {
@@ -147,5 +181,6 @@ document.getElementById('bannerInput')?.addEventListener('change', function(e) {
         document.getElementById('bannerImg').src = URL.createObjectURL(file)
     }
 });
+
 
 
