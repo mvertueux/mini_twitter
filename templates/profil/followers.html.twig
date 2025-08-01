@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="flex justify-start items-center">
-		<a class="flex items-center gap-4 text-white ml-2 mb-4 rounded-full p-2 font-semibold cursor-pointer hover:bg-[#2f3336] transition" href="{{ app.request.headers.get('referer') }}">
+		<a class="flex items-center gap-4 text-white ml-2 mb-4 rounded-full p-2 font-semibold cursor-pointer hover:bg-[#2f3336] transition" href="{{ path('profil_user', {'id':user.id}) }}">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" class="bi bi-arrow-left" viewbox="0 0 24 24">
 				<path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
 			</svg>
