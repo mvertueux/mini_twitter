@@ -26,6 +26,7 @@ final class TweetController extends AbstractController
     public function index(Request $request, TweetRepository $tweetRepository, EntityManagerInterface $entityManager): Response
     {
         $tweet = new Tweet();
+        $onglet = $request->query->get('onglet', 'for_you');
         $form = $this->createForm(TweetType::class, $tweet);
         $form->handleRequest($request);
 
@@ -52,6 +53,7 @@ final class TweetController extends AbstractController
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAllOrderedByIdDesc(),
             'form' => $form->createView(),
+            'onglet' => $onglet,
         ]);
     }
 
