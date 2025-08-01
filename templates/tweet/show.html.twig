@@ -27,7 +27,7 @@
 			<div class="flex-1">
 				<div class="flex justify-between items-center gap-2">
 					<div class="text-sm">
-						<span class="font-bold text-white">{{ app.user.username }}</span>
+						<span class="font-bold text-white">{{ user.username }}</span>
 						<span class="text-gray-400 text-xs">
 							•
 							{{ tweet.dateTweet ? tweet.dateTweet|date('d/m/y') : '' }}
@@ -115,12 +115,14 @@
 				</form>
 
 				<div class="group flex items-center cursor-pointer">
-					<span title="Voir" class="inline-flex items-center justify-center p-2 rounded-full transition group-hover:bg-[#1d9bf0]/15">
+					<span title="Ajouter au signet" class="inline-flex items-center justify-center p-2 rounded-full transition group-hover:bg-[#1d9bf0]/15">
 						<svg class="w-5 h-5 text-[#71767b] transition group-hover:text-[#1d9bf0]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24">
 							<path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z"/>
 						</svg>
 					</span>
-					<span class="-ml-1 text-sm text-[#71767b] transition group-hover:text-[#1d9bf0]">0</span>
+					<span class="-ml-1 text-sm text-[#71767b] transition group-hover:text-[#1d9bf0]">
+						0
+					</span>
 				</div>
 
 				<div class="group flex items-center cursor-pointer">
